@@ -17,12 +17,12 @@ const clienteController = require('../controllers/clienteController');
 
 
 
-// U - UPDATE (Atualizar Cliente)
-// Método: PUT
+//UPDATE (Atualizar Cliente)
+//Método: PUT
 router.put('/clientes/:cpf', clienteController.update); 
 
-// D - DELETE (Remover Cliente)
-// Método: DELETE
+//DELETE (Remover Cliente)
+//Método: DELETE
 router.delete('/clientes/:cpf', clienteController.remove);
 
 // rotas de profissional devem vir abaixo

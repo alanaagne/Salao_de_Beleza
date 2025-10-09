@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Expresso da Beleza</title>
+    <link rel="stylesheet" href="./css/style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <div id="mySidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3 style="color:white; margin:0;">Início</h3>
+            <span class="close-btn" onclick="closeNav()">&times;</span>
+        </div>
+        
+        <div class="menu-group">
+            <div class="menu-title"><i class="fas fa-scissors"></i> Serviços</div>
+            <a href="#">Novo Serviço</a>
+            <a href="#">Verificar Serviços</a>
+        </div>
+
+        <div class="menu-group">
+            <div class="menu-title"><i class="fas fa-address-card"></i> Cadastro</div>
+            <a href="clientes.html">Clientes</a>
+            <a href="#">Produtos</a>
+            <a href="profissionais.html">Funcionários</a>
+        </div>
+
+        <div class="menu-group">
+            <div class="menu-title"><i class="far fa-calendar-alt"></i> Agenda</div>
+            <a href="#">Consulta de Agenda</a>
+            <a href="#">Ajuste de Agenda</a>
+        </div>
+
+        <a href="#" class="menu-title" style="border:none; margin-top: 20px;"><i class="fas fa-cog"></i> Configurações</a>
+    </div>
+
+    <header class="header-admin">
+        <div class="header-bg-shape"></div> 
+        <div class="header-content">
+            <div class="menu-icon" onclick="openNav()"><i class="fas fa-bars"></i></div> 
+            <div class="welcome-message">Olá<br>Administrador</div>
+            <div class="user-avatar">
+                <img src="https://via.placeholder.com/50" alt="Avatar do Usuário"> 
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h2>Serviços</h2>
+        <div class="service-grid">
+            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Penteados"><span>Penteados</span></div>
+            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Serviços Especiais"><span>Serviços Especiais</span></div>
+            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Escova"><span>Escova</span></div>
+            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Tratamentos"><span>Tratamentos</span></div>
+            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Manicure e Pedicure"><span>Manicure e Pedicure</span></div>
+            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Maquiagem"><span>Maquiagem</span></div>
+        </div>
+    </main>
+
+    <footer class="navbar">
+        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i></a> 
+        <a href="#" class="nav-item"><i class="far fa-calendar-alt"></i></a> 
+        <a href="#" class="nav-item"><i class="fas fa-list-alt"></i></a> 
+        <a href="profissionais.html" class="nav-item"><i class="far fa-user"></i></a>
+    </footer>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "var(--sidebar-width)";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+    </script>
+</body>
+</html>

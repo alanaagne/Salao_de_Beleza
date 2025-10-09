@@ -3,11 +3,10 @@
 // 1. Importa a conexão com o banco de dados
 const db = require('../config/db');
 
-
-// --- U: UPDATE (Atualizar Cliente Existente) ---
+//U: UPDATE (Atualizar Cliente Existente) 
 exports.update = async (req, res) => {
     try {
-        // Pega o CPF do cliente a ser atualizado da URL (ex: /clientes/12345678900)
+        // Pega o CPF do cliente a ser atualizado da URL 
         const { cpf } = req.params; 
         
         // Pega os novos dados do corpo da requisição
@@ -19,7 +18,7 @@ exports.update = async (req, res) => {
             [cep, uf, bairro, logradouro, cidade, numero, telefone, dataNascimento, nome, cpf]
         );
 
-        // Verifica se alguma linha foi afetada (se o cliente existia)
+        // Verifica se o cliente existia
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Cliente não encontrado para atualização.' });
         }
@@ -32,7 +31,7 @@ exports.update = async (req, res) => {
 };
 
 
-// --- D: DELETE (Remover Cliente) ---
+//D: DELETE (Remover Cliente)
 exports.remove = async (req, res) => {
     try {
         // Pega o CPF do cliente a ser excluído da URL
