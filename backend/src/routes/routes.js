@@ -10,11 +10,14 @@ const clienteController = require('../controllers/clienteController');
 // A rota base que definimos no server.js é '/api', então essas rotas serão:
 // /api/clientes, /api/clientes/:cpf, etc.
 
-//C - create
+//CREATE (Cadastrar Cliente)
+router.post('/clientes', clienteController.create);      
 
+//READ - (todos os clientes)
+router.get('/clientes', clienteController.list);       
 
-//R - read
-
+//READ - (por cpf)
+router.get('/clientes/:cpf', clienteController.findByCpf);
 
 
 //UPDATE (Atualizar Cliente)
