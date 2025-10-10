@@ -26,9 +26,15 @@ Projeto desenvolvido para a disciplina de processo de desenvolvimento de sistema
 |   |   |-- /js/
 |   |   |   |-- cliente.js      (Scripts para interagir com a API de Clientes)
 |   |   |   |-- profissional.js (Scripts para interagir com a API de Profissionais)
+|   |   |   |-- funcionarios.js (Scripts para interagir com a API de Funcionários)
 |   |   |-- index.html          (Página principal ou login)
 |   |   |-- clientes.html       (Interface para o CRUD de Clientes)
 |   |   |-- profissionais.html  (Interface para o CRUD de Profissionais)
+|   |   |-- funcionarios.html  (Interface para o CRUD de Funcionários)
+|
+|-- /imagens/                  (Recursos estáticos, como logos e backgrounds)
+|   |-- imagem-avatar.png
+|   |-- imagem-fundo.png
 |
 |-- README.md               (Documentação do projeto)
 
