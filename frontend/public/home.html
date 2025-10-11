@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salão de Beleza</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Menu Lateral -->
+    <nav id="menuLateral" class="menu-lateral">
+        <div class="menu-top">
+            <div class="menu-user-info">
+                <p class="greeting">Olá</p>
+                <p class="user-role">Administrador</p>
+            </div>
+            <button class="fechar-menu" id="fecharMenu">×</button>
+        </div>
+
+        <ul>
+            <li class="titulo"><i class="fas fa-home"></i> Início</li>
+
+            <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
+            <ul>
+                <li><a href="#">Novo serviço</a></li>
+                <li><a href="#">Verificar serviços</a></li>
+            </ul>
+
+            <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
+            <ul>
+                <li><a href="#">Clientes</a></li>
+                <li><a href="#">Produtos</a></li>
+                <li><a href="#">Funcionários</a></li>
+            </ul>
+
+            <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
+            <ul>
+                <li><a href="#">Consulta de Agenda</a></li>
+                <li><a href="#">Ajuste de Agenda</a></li>
+            </ul>
+        </ul>
+
+        <div class="menu-footer">
+            <i class="fas fa-cog"></i> Configurações
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="menu-icon" id="menuIcon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="user-info">
+            <p class="greeting">Olá</p>
+            <p class="user-role">Administrador</p>
+        </div>
+        <img src="/imagens/imagem-avatar.png" alt="Avatar" class="avatar">
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h1 class="services-title">Serviços</h1>
+        <div class="services-grid">
+            <div class="service-card">
+                <img src="/imagens/penteados.jpeg" alt="Penteados">
+                <div class="service-name">Penteados</div>
+            </div>
+            <div class="service-card">
+                <img src="/imagens/servicos-especiais.jpeg" alt="Serviços Especiais">
+                <div class="service-name">Serviços Especiais</div>
+            </div>
+            <div class="service-card">
+                <img src="/imagens/escova.jpeg" alt="Escova">
+                <div class="service-name">Escova</div>
+            </div>
+            <div class="service-card">
+                <img src="/imagens/tratamentos.jpeg" alt="Tratamentos">
+                <div class="service-name">Tratamentos</div>
+            </div>
+            <div class="service-card">
+                <img src="/imagens/manicure-pedicure.jpeg" alt="Manicure e Pedicure">
+                <div class="service-name">Manicure e Pedicure</div>
+            </div>
+            <div class="service-card">
+                <img src="/imagens/maquiagem.jpeg" alt="Maquiagem">
+                <div class="service-name">Maquiagem</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+        </div>
+        <div class="nav-item">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+            </svg>
+        </div>
+        <div class="nav-item">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+        </div>
+        <div class="nav-item">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+        </div>
+    </div>
+
+    <script src="js/home.js"></script>
+</body>
+</html>
