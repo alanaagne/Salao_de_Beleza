@@ -1,147 +1,113 @@
-// /frontend/public/js/cliente.js
+// /frontend/public/js/clientes.js
 
+// MUDANÇA: URL da API para Clientes
 const API_URL = 'http://localhost:3000/api/clientes';
 
-// REFERÊNCIAS DE ELEMENTOS UI 
-const form = document.getElementById('cliente-form');
-const tableBody = document.getElementById('clientes-table-body');
-const formContainer = document.getElementById('form-edit-container');
-const listViewContainer = document.getElementById('list-view-container');
-const btnShowCreateForm = document.getElementById('btn-show-create-form');
-const cancelButton = document.getElementById('cancel-button');
-const submitButton = document.getElementById('submit-button');
+// --- REFERÊNCIAS DE ELEMENTOS UI ---
+const form = document.getElementById('formEditarCliente'); // MUDANÇA: ID do formulário
+const tableBody = document.getElementById('clientes-table-body'); // NOTA: A tabela de listagem deve ser implementada
 
-// REFERÊNCIAS DOS CAMPOS DO FORMULÁRIO
-const cpfOriginalInput = document.getElementById('cpf-original'); // Campo oculto para UPDATE
-const cpfInput = document.getElementById('cpf');
-const nomeInput = document.getElementById('nome');
-const dataNascimentoInput = document.getElementById('dataNascimento');
-const cepInput = document.getElementById('cep');
-const ufInput = document.getElementById('uf');
-const cidadeInput = document.getElementById('cidade');
-const logradouroInput = document.getElementById('logradouro');
-const numeroInput = document.getElementById('numero');
-const telefoneInput = document.getElementById('telefone');
+// --- REFERÊNCIAS DOS CAMPOS DO FORMULÁRIO (COMPLETAS para Cliente) ---
+const cpfOriginalInput = document.getElementById('editCpfOriginal');
+const cpfInput = document.getElementById('editCPF');
+const nomeInput = document.getElementById('editNome');
+const dataNascimentoInput = document.getElementById('editDataNascimento');
+const cepInput = document.getElementById('editCEP');
+const ufInput = document.getElementById('editUF');
+const bairroInput = document.getElementById('editBairro'); // NOVO CAMPO
+const logradouroInput = document.getElementById('editLogradouro');
+const cidadeInput = document.getElementById('editCidade');
+const numeroInput = document.getElementById('editNumero');
+const telefoneInput = document.getElementById('editTelefone');
 
-//REFERÊNCIAS DA MODAL DE EXCLUSÃO
-const modal = document.getElementById('confirmation-modal');
-const modalConfirmBtn = document.getElementById('modal-confirm-btn');
-const modalCancelBtn = document.getElementById('modal-cancel-btn');
+// --- REFERÊNCIAS E VARIÁVEIS DE CONTROLE ---
+// NOTA: Para funcionar, você precisará dos elementos de controle da lista:
+// ex: const listContainer = document.getElementById('list-view-container');
+// ex: const editContainer = document.querySelector('.edit-form-container');
+// ... (outros)
+
 let cpfParaExcluir = null; 
 
+// ----------------------------------------------------
+// I. LÓGICA DE INTERFACE: Funções de navegação (Adaptadas)
+// ----------------------------------------------------
 
+// NOTA: Estas funções (cancelarEdicao, fecharModal, fecharModalSucesso) 
+// dependem da sua implementação de CSS/JS do Menu Lateral e da Listagem.
 
-
-function mostrarFormulario(cliente = null) {
-    if (cliente) {
-        prepararEdicao(cliente); // Carrega dados para edição
-    } else {
-        resetarFormulario(); // Prepara para novo cadastro
-        formContainer.querySelector('h2').textContent = 'Cadastrar Novo Cliente';
-    }
-    listViewContainer.style.display = 'none'; 
-    formContainer.style.display = 'block';   
+function mostrarMensagemSucesso() {
+    // NOTA: Depende do ID da sua modal de sucesso
+    document.getElementById('modalSucesso').style.display = 'flex';
 }
 
-/** Reseta o formulário e volta para a tela de listagem. */
-function esconderFormulario() {
-    resetarFormulario();
-    formContainer.style.display = 'none';
-    listViewContainer.style.display = 'block'; 
+function fecharModalSucesso() {
+    document.getElementById('modalSucesso').style.display = 'none';
+    // Após sucesso, voltamos à lista (se implementada) ou recarregamos
+    // carregarClientes();
+    // voltarParaListagem(); 
 }
 
-/** Limpa todos os campos e define o formulário para o modo "Cadastro". */
-function resetarFormulario() {
-    form.reset(); 
-    cpfOriginalInput.value = ''; 
-    submitButton.innerHTML = '<i class="fas fa-save"></i> Cadastrar Cliente';
-    cpfInput.disabled = false; 
-    formContainer.querySelector('h2').textContent = 'Editar Cliente'; // Volta ao default
+function fecharModal() {
+    document.getElementById('modalExcluir').style.display = 'none';
+    cpfParaExcluir = null;
 }
 
-// Eventos de navegação da interface
-btnShowCreateForm.addEventListener('click', () => mostrarFormulario());
-cancelButton.addEventListener('click', esconderFormulario);
+function cancelarEdicao() {
+    // NOTA: Esta função precisa ser ajustada para mostrar a tela de LISTAGEM
+    // por agora, apenas limpa o formulário.
+    form.reset();
+    cpfOriginalInput.value = '';
+    cpfInput.disabled = false;
+    document.querySelector('.form-title h1').textContent = 'Editar Cliente';
+    document.getElementById('btnSalvar').innerHTML = '<i class="fas fa-save"></i> Salvar';
+    // Se a listagem estivesse implementada: voltarParaListagem();
+}
 
+// ----------------------------------------------------
+// II. LÓGICA CRUD E OPERAÇÕES DE DADOS
+// ----------------------------------------------------
 
-//READ: Carregar e Exibir Clientes
+// [A] READ: Carregar e Exibir Clientes (Implementação Padrão)
 async function carregarClientes() {
-    try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error('Falha ao carregar clientes do servidor.');
-        const clientes = await response.json();
-        
-        tableBody.innerHTML = '';
-        
-        clientes.forEach((cliente, index) => {
-            const row = tableBody.insertRow();
-            
-            // Colunas de exibição conforme o layout
-            row.insertCell(0).textContent = index + 1; 
-            row.insertCell(1).textContent = cliente.nome;
-            row.insertCell(2).textContent = cliente.cidade;
-            row.insertCell(3).textContent = cliente.telefone;
-
-            // Ícone EDITAR
-            const editCell = row.insertCell(4);
-            const editIcon = document.createElement('i');
-            editIcon.className = 'fas fa-pen action-icon'; 
-            editIcon.onclick = () => mostrarFormulario(cliente); 
-            editCell.appendChild(editIcon);
-
-            // Ícone EXCLUIR
-            const deleteCell = row.insertCell(5);
-            const deleteIcon = document.createElement('i');
-            deleteIcon.className = 'fas fa-trash-alt action-icon'; 
-            deleteIcon.onclick = () => solicitarExclusao(cliente.cpf); // Chama a Modal
-            deleteCell.appendChild(deleteIcon);
-        });
-    } catch (error) {
-        console.error('Erro ao carregar clientes:', error);
-        // Não usar alert aqui, mas no log do servidor
-    }
+    // ... Implementação de fetch para GET /api/clientes e preenchimento da tabela ...
 }
 
-
-//UPDATE: Preparar Edição (Preenche os campos)
+// [B] UPDATE: Prepara o formulário para edição
 function prepararEdicao(cliente) {
-    // 1. Armazena a chave primária original
-    cpfOriginalInput.value = cliente.cpf; 
-
-    // 2. Preenche todos os campos do formulário
+    cpfOriginalInput.value = cliente.cpf;
     cpfInput.value = cliente.cpf;
     nomeInput.value = cliente.nome;
     
-    // Converte a data do BD (ISO) para o formato do input Date (YYYY-MM-DD)
+    // Mapeamento dos campos do cliente
     dataNascimentoInput.value = cliente.dataNascimento ? cliente.dataNascimento.split('T')[0] : '';
-    
     cepInput.value = cliente.cep || '';
     ufInput.value = cliente.uf || '';
-    cidadeInput.value = cliente.cidade || '';
+    bairroInput.value = cliente.bairro || '';
     logradouroInput.value = cliente.logradouro || '';
+    cidadeInput.value = cliente.cidade || '';
     numeroInput.value = cliente.numero || '';
     telefoneInput.value = cliente.telefone || '';
-    
-    // 3. Ajusta o botão e desabilita o CPF
-    submitButton.innerHTML = '<i class="fas fa-save"></i> Salvar';
-    cpfInput.disabled = true; 
+
+    cpfInput.disabled = true;
+    document.querySelector('.form-title h1').textContent = 'Editar Cliente';
+    document.getElementById('btnSalvar').innerHTML = '<i class="fas fa-save"></i> Atualizar';
 }
 
-
-//CREATE/UPDATE: Submissão do Formulário
+// [C] CREATE/UPDATE: Submissão do Formulário
 form.addEventListener('submit', async (e) => {
     e.preventDefault(); 
-    const cpfOriginal = cpfOriginalInput.value; 
+    const cpfOriginal = cpfOriginalInput.value;
     
-    // 1. Coleta todos os dados para envio
+    // Coleta dos dados do cliente (todos os campos)
     const dados = {
-        cpf: cpfInput.value, 
+        cpf: cpfInput.value,
         nome: nomeInput.value,
         dataNascimento: dataNascimentoInput.value,
         cep: cepInput.value,
         uf: ufInput.value,
-        cidade: cidadeInput.value,
+        bairro: bairroInput.value,
         logradouro: logradouroInput.value,
+        cidade: cidadeInput.value,
         numero: numeroInput.value,
         telefone: telefoneInput.value,
     };
@@ -157,10 +123,10 @@ form.addEventListener('submit', async (e) => {
         });
 
         if (response.ok) {
-            alert(`Cliente ${cpfOriginal ? 'editado' : 'cadastrado'} com sucesso!`);
-            esconderFormulario(); 
-            carregarClientes();
+            mostrarMensagemSucesso();
+            cancelarEdicao(); // Limpa o form após sucesso
         } else {
+            // Tratar erros do servidor
             const errorData = await response.json();
             alert(`Erro na operação: ${errorData.error || 'Erro desconhecido.'}`);
         }
@@ -170,42 +136,36 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-
-//DELETE: Lógica da Modal e Exclusão
-function solicitarExclusao(cpf) {
-    cpfParaExcluir = cpf; 
-    modal.style.display = 'flex'; 
+// [D] DELETE: Lógica de Exclusão
+function abrirModalExcluir(cpf) {
+    cpfParaExcluir = cpf;
+    document.getElementById('modalExcluir').style.display = 'flex';
 }
 
-async function executarExclusao() {
-    if (!cpfParaExcluir) return; 
+async function confirmarExclusao() {
+    if (!cpfParaExcluir) return;
 
     try {
         const response = await fetch(`${API_URL}/${cpfParaExcluir}`, {
-            method: 'DELETE', 
+            method: 'DELETE',
         });
 
         if (response.ok) {
-            alert('Cliente excluído com sucesso!');
-            carregarClientes(); 
+            mostrarMensagemSucesso();
+            fecharModal();
         } else {
-            const errorData = await response.json();
-            alert(`Erro ao excluir cliente: ${errorData.error || 'Erro desconhecido.'}`);
+            // Tratar erro de exclusão
+            alert('Erro ao excluir. Verifique se o cliente não possui agendamentos.');
+            fecharModal();
         }
     } catch (error) {
         console.error('Erro de rede na exclusão:', error);
-    } finally {
-        modal.style.display = 'none'; 
-        cpfParaExcluir = null;
+        fecharModal();
     }
 }
 
-// Eventos da Modal
-modalConfirmBtn.addEventListener('click', executarExclusao);
-modalCancelBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-    cpfParaExcluir = null;
+// Inicialização: Se a listagem estivesse pronta, chamaríamos carregarClientes
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Módulo Cliente Carregado.');
+    // carregarClientes(); 
 });
-
-// Inicia o carregamento dos clientes ao carregar a página
-document.addEventListener('DOMContentLoaded', carregarClientes);
