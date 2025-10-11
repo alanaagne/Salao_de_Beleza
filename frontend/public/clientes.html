@@ -3,140 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Cliente - Expresso da Beleza</title>
-    <link rel="stylesheet" href="/frontend/public/css/funcionarios.css"> 
+    <title>Cadastro de Clientes - Salão de Beleza</title>
+    <link rel="stylesheet" href="./css/clientes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <div class="menu-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="user-info">
-                <p class="greeting">Olá</p>
-                <p class="user-role">Administrador</p>
-            </div>
-        </div>
-        <div class="user-avatar">
-            <img src="/imagens/imagem-avatar.png" alt="Avatar">
-        </div>
-    </header>
-
-    <nav id="menuLateral" class="menu-lateral">
-        <div class="menu-top">
-            <div class="menu-user-info">
-                <p class="greeting">Olá</p>
-                <p class="user-role">Administrador</p>
-            </div>
-            <button class="fechar-menu">×</button>
-        </div>
-
-        <ul>
-            <li class="titulo"><i class="fas fa-home"></i> Início</li>
-
-            <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
-            <ul>
-                <li><a href="#">Novo serviço</a></li>
-                <li><a href="#">Verificar serviços</a></li>
-            </ul>
-
-            <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
-            <ul>
-                <li><a href="clientes.html">Clientes</a></li>
-                <li><a href="#">Produtos</a></li>
-                <li><a href="funcionarios.html">Funcionários</a></li> 
-            </ul>
-
-            <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
-            <ul>
-                <li><a href="#">Consulta de Agenda</a></li>
-                <li><a href="#">Ajuste de Agenda</a></li>
-            </ul>
-        </ul>
-
-        <div class="menu-footer">
-            <i class="fas fa-cog"></i> Configurações
-        </div>
-    </nav>
+    
+    <header class="header"></header>
+    <nav id="menuLateral" class="menu-lateral"></nav>
 
     <main class="main-content">
-        <div class="edit-form-container">
+        
+        <div id="listagem-container" class="edit-form-container"> 
+            
+            <div class="form-title"> 
+                <h1>Registro de Clientes</h1>
+            </div>
+
+            <div class="search-bar">
+                <p class="search-label">Pesquisar Cadastrados</p>
+                <div class="search-input-wrapper">
+                    <button id="btn-show-create" class="btn-cadastrar"><i class="fas fa-plus"></i> Cadastrar</button>
+                    <input type="text" id="search-input" placeholder="" class="search-input">
+                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="clientes-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Cidade</th>
+                            <th>Telefone</th>
+                            <th>Editar</th> 
+                            <th>Excluir</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="clientes-table-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div id="formulario-container" class="edit-form-container" style="display: none;">
+            
             <div class="form-title">
-                <h1>Editar Cliente</h1> 
+                <h1 id="form-title-text">Cadastrar Novo Cliente</h1> 
             </div>
 
             <form id="formEditarCliente">
-                <input type="hidden" id="editCpfOriginal"> <div class="form-row">
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input type="text" id="editNome" placeholder="Digite o nome completo." required>
-                    </div>
-                    <div class="form-group">
-                        <label>CPF</label>
-                        <input type="text" id="editCPF" placeholder="000.000.000-00" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Nascimento</label>
-                        <input type="date" id="editDataNascimento" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>CEP</label>
-                        <input type="text" id="editCEP" placeholder="00000-000" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cidade</label>
-                        <input type="text" id="editCidade" placeholder="Digite o nome da cidade." required>
-                    </div>
-                    <div class="form-group">
-                        <label>UF</label>
-                        <input type="text" id="editUF" placeholder="Estado (ex: BA)" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Bairro</label>
-                        <input type="text" id="editBairro" placeholder="Digite o bairro." required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Logradouro</label>
-                        <input type="text" id="editLogradouro" placeholder="Rua, Avenida, etc." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Número</label>
-                        <input type="text" id="editNumero" placeholder="Número da casa/apto." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Telefone</label>
-                        <input type="text" id="editTelefone" placeholder="(00)00000-0000" required>
-                    </div>
-                </div>
-
                 <div class="form-buttons">
-                    <button type="submit" class="btn-salvar" id="btnSalvar">
-                        <i class="fas fa-save"></i> Salvar
-                    </button>
-
-                    <button type="button" class="btn-cancelar" onclick="cancelarEdicao()">
-                        <i class="fas fa-times"></i> Cancelar
-                    </button>
+                    <button type="submit" class="btn-salvar" id="btnSalvar"><i class="fas fa-save"></i> Salvar</button>
+                    <button type="button" class="btn-cancelar" onclick="cancelarEdicao()"><i class="fas fa-times"></i> Cancelar</button>
                 </div>
             </form>
         </div>
+        
     </main>
 
     <div id="modalExcluir" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">❗</div>
+            <p class="modal-text">Tem Certeza<br>de que deseja<br>executar essa<br>ação?</p>
+            <div class="modal-buttons">
+                <button class="btn-confirmar" id="modal-delete-confirm">CONFIRMAR</button>
+                <button class="btn-cancelar-modal" onclick="fecharModal()">CANCELAR</button>
+            </div>
         </div>
-    <div id="modalSucesso" class="modal">
-        </div>
+    </div>
 
-    <script src="./js/clientes.js"></script> 
+    <div id="modalSucesso" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon-success">✓</div>
+            <p class="modal-text">Execução<br>feita com<br>sucesso!</p>
+            <div class="modal-buttons">
+                <button class="btn-voltar" onclick="fecharModalSucesso()">VOLTAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/clientes.js"></script>
 
 </body>
 </html>

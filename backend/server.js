@@ -1,12 +1,12 @@
 // /backend/server.js
-//também precisa das dependências para funcionar (elas fica na node modulos na pasta backend após rodar o comando)
+
 
 const express = require('express');
 const cors = require('cors');
 const routes = require('./src/routes/routes');
 
 const app = express();
-const PORT = 3000; // Ou qualquer porta que você queira usar para o Backend
+const PORT = 3000; 
 
 // Middlewares
 app.use(cors()); // Permite requisições do Frontend
