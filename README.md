@@ -10,7 +10,7 @@ Projeto desenvolvido para a disciplina de processo de desenvolvimento de sistema
 |   |-- /src/
 |   |   |-- /controllers/   (Lógica de negócio, como cadastrar cliente, listar funcionário)
 |   |   |   |-- clienteController.js
-|   |   |   |-- profissionalController.js
+|   |   |   |-- funcionarioController.js
 |   |   |-- /routes/        (Definição dos endpoints da API, ex: /clientes, /profissionais)
 |   |   |   |-- routes.js
 |   |   |-- /config/        (Configurações de banco de dados e ambiente)
@@ -22,14 +22,15 @@ Projeto desenvolvido para a disciplina de processo de desenvolvimento de sistema
 |-- /frontend/
 |   |-- /public/
 |   |   |-- /css/
+|   |   |   |-- clientes.css
+|   |   |   |-- funcionarios.css
 |   |   |   |-- style.css
 |   |   |-- /js/
 |   |   |   |-- cliente.js      (Scripts para interagir com a API de Clientes)
-|   |   |   |-- profissional.js (Scripts para interagir com a API de Profissionais)
+|   |   |   |-- main.js
 |   |   |   |-- funcionarios.js (Scripts para interagir com a API de Funcionários)
 |   |   |-- index.html          (Página principal ou login)
 |   |   |-- clientes.html       (Interface para o CRUD de Clientes)
-|   |   |-- profissionais.html  (Interface para o CRUD de Profissionais)
 |   |   |-- funcionarios.html  (Interface para o CRUD de Funcionários)
 |
 |-- /imagens/                  (Recursos estáticos, como logos e backgrounds)
