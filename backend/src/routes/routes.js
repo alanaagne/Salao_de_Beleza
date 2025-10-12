@@ -5,6 +5,7 @@ const router = express.Router();
 
 //Importa o controller de Cliente
 const clienteController = require('../controllers/clienteController'); 
+const funcionarioController = require('../controllers/funcionarioController');
 
 // Rotas de Cliente 
 // A rota base definida no server.js é '/api', então essas rotas serão:
@@ -29,5 +30,17 @@ router.put('/clientes/:cpf', clienteController.update);
 router.delete('/clientes/:cpf', clienteController.remove);
 
 // rotas de profissional devem vir abaixo
+// R: READ (Listar Todos)
+router.get('/funcionarios', funcionarioController.list);
+// C: CREATE
+router.post('/funcionarios', funcionarioController.create);
+// R: READ (Buscar por CPF)
+router.get('/funcionarios/:cpf', funcionarioController.findByCpf);
+// U: UPDATE
+router.put('/funcionarios/:cpf', funcionarioController.update);
+// D: DELETE
+router.delete('/funcionarios/:cpf', funcionarioController.remove);
 
 module.exports = router;
+
+

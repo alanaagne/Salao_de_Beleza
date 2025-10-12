@@ -1,266 +1,64 @@
-// Configuração da API
+// frontend/public/js/funcionarios.js
+
+// Configuração da API - Usando a porta 3000 e o endpoint padronizado
 const API_URL = 'http://localhost:3000/api/funcionarios';
 
-// Carregar ao iniciar a página
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Página carregada');
-    
-    // Event listener para o formulário de edição
-    const form = document.getElementById('formEditarFuncionario');
-    if (form) {
-        form.addEventListener('submit', salvarEdicao);
-        console.log('Formulário encontrado e evento adicionado');
-    } else {
-        console.error('Formulário não encontrado!');
-    }
+let cpfParaExcluir = null;
+let modoAtual = null; // 'cadastro' ou 'edicao'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    
-// Event listener para o menu hambúrguer
-const menuToggle = document.querySelector('.menu-toggle');
-if (menuToggle) {
-    menuToggle.addEventListener('click', toggleMenu); // chama a função toggleMenu
-    console.log('Menu hambúrguer configurado e clicável');
-} else {
-    console.error('Menu não encontrado!');
-}
+// =========================================================================
+// FUNÇÕES AUXILIARES DE FORMATAÇÃO E INTERFACE (Baseado no código da colega)
+// =========================================================================
 
 // Função para abrir/fechar menu lateral
 function toggleMenu() {
     const menu = document.getElementById('menuLateral');
     if (menu) {
-        menu.classList.toggle('aberto'); // adiciona ou remove a classe 'aberto'
-        console.log('Menu lateral', menu.classList.contains('aberto') ? 'aberto' : 'fechado');
+        menu.classList.toggle('aberto');
     }
 }
 
-
-    // ✅ Botão de fechar menu lateral
-    const btnFecharMenu = document.querySelector('.fechar-menu');
-    if (btnFecharMenu) {
-        btnFecharMenu.addEventListener('click', toggleMenu);
-        console.log('Botão de fechar menu configurado');
-    }
-    
-   // Chama função de máscaras
-    adicionarMascaras();
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Função para salvar edição
-function salvarEdicao(event) {
-    event.preventDefault(); // Impede o reload da página
-    console.log('Função salvarEdicao chamada');
-    
-    // Validar campos antes de abrir o modal
-    const form = document.getElementById('formEditarFuncionario');
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-    
-    // Mostrar modal de confirmação (campos permanecem preenchidos)
-    abrirModalConfirmarSalvar();
-}
-
-// Função para abrir modal de confirmar salvamento
-function abrirModalConfirmarSalvar() {
-    console.log('Abrindo modal de confirmação');
-    document.getElementById('modalExcluir').style.display = 'flex';
-}
-
-// Função para fechar modal
+// Função para fechar modal de confirmação
 function fecharModal() {
-    console.log('Fechando modal');
     document.getElementById('modalExcluir').style.display = 'none';
-}
-
-// Função para confirmar salvamento
-async function confirmarExclusao() {
-    console.log('Confirmando salvamento');
-    
-    // Fechar modal de confirmação
-    fecharModal();
-    
-    const id = document.getElementById('editId').value;
-    
-    const funcionarioAtualizado = {
-        nome: document.getElementById('editNome').value,
-        cpf: document.getElementById('editCPF').value,
-        rg: document.getElementById('editRG').value,
-        cep: document.getElementById('editCEP').value,
-        cidade: document.getElementById('editCidade').value,
-        endereco: document.getElementById('editEndereco').value,
-        telefone: document.getElementById('editTelefone').value,
-        cargo: document.getElementById('editCargo').value,
-        email: document.getElementById('editEmail').value,
-        salario: document.getElementById('editSalario').value,
-        data_admissao: document.getElementById('editDataAdmissao').value,
-        ativo: document.getElementById('editAtivo').value
-    };
-    
-    console.log('Dados a serem enviados:', funcionarioAtualizado);
-    
-    try {
-        // Se não tem ID, é um cadastro novo (simula para teste)
-        if (!id) {
-            console.log('Simulando salvamento (sem backend)');
-            // Mostrar modal de sucesso
-            mostrarModalSucesso();
-            return;
-        }
-        
-        const response = await fetch(`${API_URL}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(funcionarioAtualizado)
-        });
-        
-        if (response.ok) {
-            console.log('Salvamento realizado com sucesso');
-            mostrarModalSucesso();
-        } else {
-            const error = await response.json();
-            alert(error.message || 'Erro ao atualizar funcionário.');
-        }
-    } catch (error) {
-        console.error('Erro ao salvar edição:', error);
-        // Se não conseguir conectar ao backend, simula sucesso para testar front
-        mostrarModalSucesso();
-    }
-}
-
-// Função para cancelar edição
-function cancelarEdicao() {
-    console.log('Cancelando edição');
-    if (confirm('Tem certeza que deseja cancelar? Todas as alterações serão perdidas.')) {
-        document.getElementById('formEditarFuncionario').reset();
-    }
-}
-
-// Função para mostrar modal de sucesso
-function mostrarModalSucesso() {
-    console.log('Mostrando modal de sucesso');
-    document.getElementById('modalSucesso').style.display = 'flex';
-    
-    // Fechar automaticamente após 3 segundos
-    setTimeout(() => {
-        fecharModalSucesso();
-        // Limpar formulário somente APÓS fechar o modal de sucesso
-        document.getElementById('formEditarFuncionario').reset();
-    }, 3000);
 }
 
 // Função para fechar modal de sucesso
 function fecharModalSucesso() {
-    console.log('Fechando modal de sucesso');
     document.getElementById('modalSucesso').style.display = 'none';
 }
 
-// Função para adicionar máscaras
-function adicionarMascaras() {
-    // Máscara para CPF
-    const cpfInput = document.getElementById('editCPF');
-    if (cpfInput) {
-        cpfInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                e.target.value = value;
-            }
-        });
-    }
+// Função para mostrar modal de sucesso (com fechamento automático)
+function mostrarModalSucesso() {
+    document.getElementById('modalSucesso').style.display = 'flex';
 
-    // Máscara para RG
-    const rgInput = document.getElementById('editRG');
-    if (rgInput) {
-        rgInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 9) {
-                value = value.replace(/(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1})$/, '$1-$2');
-                e.target.value = value;
-            }
-        });
-    }
+    setTimeout(() => {
+        fecharModalSucesso();
 
-    // Máscara para CEP
-    const cepInput = document.getElementById('editCEP');
-    if (cepInput) {
-        cepInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 8) {
-                value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                e.target.value = value;
-            }
-        });
-    }
+        // Se estiver em modo cadastro, limpa o formulário
+        if (modoAtual === 'cadastro') {
+            const formCadastro = document.getElementById('formCadastroFuncionario');
+            if (formCadastro) formCadastro.reset();
+        }
 
-    // Máscara para Telefone
-    const telefoneInput = document.getElementById('editTelefone');
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{2})(\d)/, '($1)$2');
-                value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                e.target.value = value;
-            }
-        });
-    }
+        // Se estiver na tela de registro/listagem, recarrega
+        if (document.getElementById('tabela-profissionais')) {
+            carregarProfissionais();
+        } else {
+            // Se estiver na tela de edição e salvou, volta para a listagem
+            window.location.href = 'registro.html';
+        }
 
-    // Máscara para Salário
-    const salarioInput = document.getElementById('editSalario');
-    if (salarioInput) {
-        salarioInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value === '') {
-                e.target.value = '';
-                return;
-            }
-            value = (parseInt(value) / 100).toFixed(2);
-            e.target.value = 'R$ ' + value.replace('.', ',');
-        });
-    }
+    }, 3000);
 }
 
-// Funções auxiliares de formatação
+// Função para abrir modal de confirmar salvamento
+function abrirModalConfirmarSalvar(modo) {
+    modoAtual = modo;
+    document.getElementById('modalExcluir').style.display = 'flex';
+}
+
+// Funções de formatação (Telefone e Data)
 function formatarTelefone(telefone) {
     if (!telefone) return '';
     const cleaned = telefone.replace(/\D/g, '');
@@ -277,4 +75,277 @@ function formatarDataParaInput(data) {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+}
+
+// [ ... ADICIONAR A FUNÇÃO adicionarMascaras() COMPLETA AQUI ... ]
+// Esta função é essencial e deve vir do código da sua colega, incluindo todas as lógicas de máscara (CPF, RG, CEP, Salário, etc.)
+
+// =========================================================================
+// LÓGICA DE CRUD (CRIAR, LER, ATUALIZAR, DELETAR)
+// =========================================================================
+
+// C: CREATE (Chamada ao submeter o formulário de cadastro)
+function salvarCadastro(event) {
+    event.preventDefault();
+    const form = document.getElementById('formCadastroFuncionario');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    abrirModalConfirmarSalvar('cadastro');
+}
+
+// U: UPDATE (Chamada ao submeter o formulário de edição)
+function salvarEdicao(event) {
+    event.preventDefault();
+    const form = document.getElementById('formEditarFuncionario');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    console.log("oi");
+    abrirModalConfirmarSalvar('edicao');
+}
+
+
+// Função principal de envio: Cadastra (POST) ou Edita (PUT)
+async function confirmarSalvar() {
+    fecharModal();
+
+    // Define qual formulário e rota usar
+    const modo = modoAtual;
+    const formId = modo === 'cadastro' ? 'formCadastroFuncionario' : 'formEditarFuncionario';
+    const form = document.getElementById(formId);
+
+    const formData = new FormData(form);
+    const dadosFormulario = Object.fromEntries(formData.entries());
+
+    // Mapeamento dos campos (usando os IDs/Names do formulário dela)
+    const dadosParaEnvio = {
+        cpf: dadosFormulario.editCPF,
+        nome: dadosFormulario.editNome,
+        salario: dadosFormulario.editSalario, // Será limpo pelo backend
+        endereco: dadosFormulario.editEndereco,
+        telefone: dadosFormulario.editTelefone,
+        // O campo dela é 'Cargo', o seu é 'especializacao'
+        cargo: dadosFormulario.editCargo,
+        rg: dadosFormulario.editRG,
+        cep: dadosFormulario.editCEP,
+        cidade: dadosFormulario.editCidade,
+        email: dadosFormulario.editEmail,
+        dataAdmissao: dadosFormulario.editDataAdmissao,
+        // O campo 'ativo' só existe na edição e é crucial para o PUT
+        ativo: dadosFormulario.editAtivo || '1'
+    };
+
+    try {
+        const cpfURL = dadosParaEnvio.cpf; // Usamos o CPF como identificador
+        const url = modo === 'cadastro' ? API_URL : `${API_URL}/${cpfURL}`;
+        const method = modo === 'cadastro' ? 'POST' : 'PUT';
+
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosParaEnvio)
+        });
+
+        if (response.ok || response.status === 201) {
+            mostrarModalSucesso();
+        } else {
+            const error = await response.json();
+            alert(error.error || error.message || `Erro ao ${modo}.`);
+        }
+    } catch (error) {
+        console.error(`Erro ao ${modo}:`, error);
+        alert('Erro de conexão com o servidor.');
+    }
+}
+
+
+// R: READ (Função para buscar 1 funcionário e preencher o form de edição)
+async function editarFuncionario(cpf) {
+    try {
+        // 1. Busca os dados do funcionário
+        const response = await fetch(`${API_URL}/${cpf}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || 'Funcionário não encontrado.');
+            return;
+        }
+
+        // 2. Redireciona para a página de edição
+        // Se a lógica dela usa a mesma página para Edição, você teria que preencher os campos aqui.
+        // Já que você tem um arquivo funcionarios.html (que parece ser a edição), vamos passar o CPF pela URL
+        window.location.href = `funcionarios.html?cpf=${cpf}`;
+
+    } catch (error) {
+        console.error('Erro ao buscar dados para edição:', error);
+        alert('Não foi possível carregar dados para edição.');
+    }
+}
+
+// R: READ (Função para carregar a lista de funcionários na tela de Registro)
+async function carregarProfissionais() {
+    const tbody = document.querySelector('#tabela-profissionais tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    try {
+        const response = await fetch(API_URL);
+        const profissionais = await response.json();
+
+        if (profissionais.length === 0) {
+            document.getElementById('mensagem-vazio').style.display = 'block';
+            return;
+        }
+        document.getElementById('mensagem-vazio').style.display = 'none';
+
+        profissionais.forEach(p => {
+            const row = tbody.insertRow();
+            row.insertCell().textContent = p.cpf;
+            row.insertCell().textContent = p.nome;
+            row.insertCell().textContent = p.especializacao;
+            row.insertCell().textContent = formatarTelefone(p.telefone);
+
+            // Botões de Ação
+            const acoesCell = row.insertCell();
+            acoesCell.innerHTML = `
+                <button class="btn-editar" onclick="editarFuncionario('${p.cpf}')">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="btn-excluir" onclick="abrirModalExcluir('${p.cpf}')">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            `;
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar a lista:', error);
+    }
+}
+
+
+// D: DELETE (Função de confirmação que envia o DELETE para a API)
+async function confirmarExclusao() {
+    fecharModal();
+    if (!cpfParaExcluir) return;
+
+    try {
+        const response = await fetch(`${API_URL}/${cpfParaExcluir}`, {
+            method: 'DELETE',
+        });
+
+        if (response.status === 204) { // 204 = No Content (Sucesso DELETE)
+            mostrarModalSucesso();
+        } else {
+            const error = await response.json().catch(() => ({ message: 'Erro desconhecido.' }));
+            alert(error.message || 'Erro ao excluir funcionário.');
+        }
+    } catch (error) {
+        alert('Erro de conexão ao excluir funcionário.');
+    }
+}
+
+
+// =========================================================================
+// LÓGICA DE CARREGAMENTO DA PÁGINA
+// =========================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. LÓGICA DE EVENTOS GLOBAIS (MENU E MODAL)
+    // O menu e o botão de confirmar modal só são configurados UMA VEZ.
+    const menuToggle = document.querySelector('.menu-toggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', toggleMenu);
+    }
+    const btnFecharMenu = document.querySelector('.fechar-menu');
+    if (btnFecharMenu) {
+        btnFecharMenu.addEventListener('click', toggleMenu);
+    }
+
+    // Configuração do botão de CONFIRMAR do modal (UNIFICADO)
+    const btnConfirmarModal = document.querySelector('#modalExcluir .btn-confirmar');
+    if (btnConfirmarModal) {
+        btnConfirmarModal.onclick = () => {
+            if (modoAtual === 'cadastro' || modoAtual === 'edicao') {
+                confirmarSalvar();
+            } else if (cpfParaExcluir) {
+                confirmarExclusao();
+            }
+        };
+    }
+    
+    // -------------------------------------------------------------------
+    // 2. LÓGICA DE INICIALIZAÇÃO ESPECÍFICA DA PÁGINA (Executada uma única vez)
+    // -------------------------------------------------------------------
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const cpf = urlParams.get('cpf');
+    const formEdicao = document.getElementById('formEditarFuncionario');
+    const formCadastro = document.getElementById('formCadastroFuncionario');
+    const tabelaRegistro = document.getElementById('tabela-profissionais');
+
+
+    if (cpf && formEdicao) {
+        // MODO EDIÇÃO: Inicializa o formulário de edição
+        modoAtual = 'edicao';
+        formEdicao.addEventListener('submit', salvarEdicao);
+        carregarDadosNoFormulario(cpf);
+        adicionarMascaras(); 
+
+    } else if (tabelaRegistro) {
+        // MODO LISTAGEM: Inicializa a listagem
+        carregarProfissionais();
+    
+    } else if (formCadastro) {
+        // MODO CADASTRO: Inicializa o formulário de cadastro
+        modoAtual = 'cadastro';
+        formCadastro.addEventListener('submit', salvarCadastro);
+        adicionarMascaras();
+    }
+});
+
+// FUNÇÃO AUXILIAR PARA CARREGAR DADOS NO FORMULÁRIO DE EDIÇÃO
+async function carregarDadosNoFormulario(cpf) {
+    try {
+        const response = await fetch(`${API_URL}/${cpf}`);
+        const p = await response.json();
+
+        if (!response.ok) {
+            alert(p.message || 'Erro ao carregar dados do funcionário.');
+            return;
+        }
+
+        // Preenche os campos do formulário (usando os IDs dela)
+        document.getElementById('editId').value = p.cpf; // Assume que o ID é o CPF
+        document.getElementById('editCPF').value = p.cpf;
+        document.getElementById('editNome').value = p.nome;
+        document.getElementById('editRG').value = p.rg;
+        document.getElementById('editCEP').value = p.cep;
+        document.getElementById('editCidade').value = p.cidade;
+        document.getElementById('editEndereco').value = p.endereco;
+        document.getElementById('editTelefone').value = formatarTelefone(p.telefone).replace(/[^0-9\(\)\-\s]/g, ''); // Preenche e deixa a máscara do JS agir
+        document.getElementById('editCargo').value = p.especializacao;
+        document.getElementById('editEmail').value = p.email;
+
+        // Mapeamento de Status: Ativo='1', Inativo='0'
+        const statusValue = p.status === 'Ativo' ? '1' : '0';
+        document.getElementById('editAtivo').value = statusValue;
+
+        // Data deve ser formatada para AAAA-MM-DD para o input type="date"
+        document.getElementById('editDataAdmissao').value = formatarDataParaInput(p.data_admissao);
+
+        // Salário deve ser preenchido para a máscara funcionar no próximo 'input'
+        // NOTA: O Salário precisa ser preenchido com o valor numérico antes da máscara ser ativada
+        document.getElementById('editSalario').value = (p.salario || 0).toString().replace('.', ',');
+
+    } catch (error) {
+        console.error('Erro ao preencher formulário:', error);
+    }
 }
