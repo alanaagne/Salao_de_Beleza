@@ -1,9 +1,9 @@
 // /backend/src/controllers/clienteController.js
 
-// 1. Importa a conexão com o banco de dados
+// Importa a conexão com o banco de dados
 const db = require('../config/db');
 
-//U: UPDATE (Atualizar Cliente Existente) 
+//UPDATE (Atualizar Cliente Existente) 
 exports.update = async (req, res) => {
     try {
         // Pega o CPF do cliente a ser atualizado da URL 
@@ -31,7 +31,7 @@ exports.update = async (req, res) => {
 };
 
 
-//D: DELETE (Remover Cliente)
+//DELETE (Remover Cliente)
 exports.remove = async (req, res) => {
     try {
         // Pega o CPF do cliente a ser excluído da URL
@@ -47,14 +47,14 @@ exports.remove = async (req, res) => {
 
         res.status(200).json({ message: 'Cliente excluído com sucesso!' });
     } catch (error) {
-        // Importante: Se o cliente tem agendamentos (chave estrangeira), o BD pode rejeitar a exclusão.
+        // Se o cliente tem agendamentos (chave estrangeira), o BD pode rejeitar a exclusão.
         console.error('Erro ao excluir cliente:', error);
         res.status(500).json({ error: 'Erro interno ao excluir cliente. Verifique se há dados relacionados.' });
     }
 };
 
 
-// C: CREATE (Cadastrar Novo Cliente)
+//CREATE (Cadastrar Novo Cliente)
 exports.create = async (req, res) => {
     try {
         // Pega os dados do corpo da requisição
@@ -87,7 +87,7 @@ exports.create = async (req, res) => {
     }
 };
 
-// R: READ (Listar Clientes)
+//READ (Listar Clientes)
 exports.list = async (req, res) => {
     try {
         // SQL para buscar todos os clientes
@@ -100,7 +100,7 @@ exports.list = async (req, res) => {
     }
 };
 
-// R: READ (Buscar Cliente por CPF)
+// READ (Buscar Cliente por CPF)
 exports.findByCpf = async (req, res) => {
     try {
         const { cpf } = req.params;
