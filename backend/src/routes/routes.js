@@ -3,20 +3,20 @@
 const express = require('express');
 const router = express.Router();
 
-// 1. Importa o controller de Cliente
+//Importa o controller de Cliente
 const clienteController = require('../controllers/clienteController'); 
 
-// Rotas de Cliente (CRUD COMPLETO)
-// A rota base que definimos no server.js é '/api', então essas rotas serão:
+// Rotas de Cliente 
+// A rota base definida no server.js é '/api', então essas rotas serão:
 // /api/clientes, /api/clientes/:cpf, etc.
 
 //CREATE (Cadastrar Cliente)
 router.post('/clientes', clienteController.create);      
 
-//READ - (todos os clientes)
+//READ (todos os clientes)
 router.get('/clientes', clienteController.list);       
 
-//READ - (por cpf)
+//READ (por cpf)
 router.get('/clientes/:cpf', clienteController.findByCpf);
 
 
