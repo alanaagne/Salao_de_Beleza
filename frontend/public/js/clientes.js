@@ -2,7 +2,7 @@
 
 const API_URL = 'http://localhost:3000/api/clientes';
 
-// --- REFERÊNCIAS GERAIS E DE TELA ---
+// REFERÊNCIAS GERAIS E DE TELA 
 const form = document.getElementById('formEditarCliente');
 const tableBody = document.getElementById('clientes-table-body');
 const listContainer = document.getElementById('listagem-container');
@@ -12,7 +12,7 @@ const btnShowCreate = document.getElementById('btn-show-create');
 const modalExcluir = document.getElementById('modalExcluir');
 const modalDeleteConfirmBtn = document.getElementById('modal-delete-confirm');
 
-// --- REFERÊNCIAS DOS INPUTS ---
+// REFERÊNCIAS DOS INPUTS 
 const cpfOriginalInput = document.getElementById('editCpfOriginal');
 const nomeInput = document.getElementById('editNome');
 const cpfInput = document.getElementById('editCPF');
@@ -28,9 +28,9 @@ const telefoneInput = document.getElementById('editTelefone');
 
 let cpfParaDeletar = null; 
 
-// ----------------------------------------------------
-// I. LÓGICA DE INTERFACE: Troca de Telas
-// ----------------------------------------------------
+
+// LÓGICA DE INTERFACE: Troca de Telas
+
 
 // Mostra o formulário no modo 'Cadastrar'
 function mostrarFormularioCadastro() {
@@ -55,10 +55,10 @@ function mostrarFormularioEdicao(cliente) {
 
 // Volta para a tela de listagem
 function cancelarEdicao() {
-    // Não precisa de confirmação se for apenas fechar a modal de sucesso
+    
     const isEditing = formContainer.style.display === 'block';
 
-    if (isEditing && confirm('Tem certeza que deseja cancelar? Todas as alterações serão perdidas.')) {
+    if (isEditing && confirm('Deseja retornar?')) {
         form.reset();
         formContainer.style.display = 'none';
         listContainer.style.display = 'block';
@@ -72,11 +72,11 @@ function cancelarEdicao() {
     }
 }
 
-// ----------------------------------------------------
-// II. CRUD: Funções Principais
-// ----------------------------------------------------
 
-// [A] READ: Carregar e Exibir Clientes
+// CRUD: Funções Principais
+
+
+// READ: Carregar e Exibir Clientes
 async function carregarClientes() {
     try {
         const response = await fetch(API_URL);
@@ -86,7 +86,7 @@ async function carregarClientes() {
         clientes.forEach(cliente => {
             const row = tableBody.insertRow();
             
-            // NOTE: A ordem da tabela no HTML é: ID, Nome, Cidade, Telefone, Editar, Excluir
+            // A ordem da tabela no HTML é: ID, Nome, Cidade, Telefone, Editar, Excluir
             // O ID é um valor de exemplo, deve vir do BD (e.g., cliente.id)
             row.insertCell(0).textContent = cliente.id || '1'; 
             
@@ -94,9 +94,8 @@ async function carregarClientes() {
             row.insertCell(2).textContent = cliente.cidade;
             row.insertCell(3).textContent = formatarTelefone(cliente.telefone);
             
-            // --- CÓDIGO CORRIGIDO PARA CLIQUE ---
             
-            // 1. Codifica o objeto cliente para ser seguro no atributo onclick
+            // Codifica o objeto cliente para ser seguro no atributo onclick
             const clienteJSONString = JSON.stringify(cliente).replace(/"/g, '&quot;');
             
             // Coluna Editar (Célula 4)
@@ -121,7 +120,7 @@ async function carregarClientes() {
     }
 }
 
-// [B] CREATE / UPDATE: Submissão do Formulário
+// CREATE / UPDATE: Submissão do Formulário
 form.addEventListener('submit', async (e) => {
     e.preventDefault(); 
     
@@ -144,7 +143,7 @@ form.addEventListener('submit', async (e) => {
         logradouro: logradouroInput.value,
         numero: numeroInput.value,
         telefone: telefoneInput.value.replace(/\D/g, ''),
-        // Adicione o campo E-mail, se ele existir no seu HTML (image_b3cd7e.png)
+        // Adicione o campo E-mail, se ele existir no seu HTML
         // email: document.getElementById('editEmail').value,
     };
 
@@ -170,7 +169,7 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// [C] DELETE: Lógica de Exclusão (Modal de Confirmação)
+// DELETE: Lógica de Exclusão (Modal de Confirmação)
 function solicitarExclusao(cpf) {
     cpfParaDeletar = cpf; 
     modalExcluir.style.display = 'flex'; // Abre a modal de exclusão
@@ -196,9 +195,9 @@ modalDeleteConfirmBtn.addEventListener('click', async () => {
     }
 });
 
-// ----------------------------------------------------
-// III. Funções Auxiliares (Modals e Preenchimento)
-// ----------------------------------------------------
+
+// Funções Auxiliares (Modals e Preenchimento)
+
 
 function fecharModal() {
     modalExcluir.style.display = 'none';
@@ -216,7 +215,7 @@ function fecharModalSucesso() {
     cancelarEdicao(); // Volta para a listagem
 }
 
-// ✅ Função auxiliar COMPLETA para preencher o form 
+// Função auxiliar para preencher o form 
 function preencherFormulario(cliente) {
     nomeInput.value = cliente.nome || '';
     cpfInput.value = formatarCPF(cliente.cpf) || ''; 
@@ -234,7 +233,7 @@ function preencherFormulario(cliente) {
 }
 
 
-// --- INICIALIZAÇÃO E EVENTOS ---
+//  INICIALIZAÇÃO E EVENTOS 
 document.addEventListener('DOMContentLoaded', () => {
     btnShowCreate.addEventListener('click', mostrarFormularioCadastro); 
     
@@ -252,9 +251,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// ----------------------------------------------------
-// IV. FUNÇÕES DE INTERFACE (Menu Lateral e Máscaras)
-// ----------------------------------------------------
+
+// FUNÇÕES DE INTERFACE (Menu Lateral e Máscaras)
+
 
 function toggleMenu() {
     const menu = document.getElementById('menuLateral');
@@ -302,9 +301,9 @@ function adicionarMascaras() {
     }
 }
 
-// ----------------------------------------------------
-// V. FUNÇÕES DE FORMATAÇÃO
-// ----------------------------------------------------
+
+// FUNÇÕES DE FORMATAÇÃO
+
 
 function formatarCPF(cpf) {
     if (!cpf) return '';
