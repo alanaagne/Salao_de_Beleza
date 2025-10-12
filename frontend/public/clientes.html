@@ -55,6 +55,65 @@
             </div>
 
             <form id="formEditarCliente">
+                
+                <input type="hidden" id="editCpfOriginal"> 
+
+                <div class="form-group-row">
+                    <div class="form-field">
+                        <label for="editNome">Nome Completo *</label>
+                        <input type="text" id="editNome" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="editDataNascimento">Data de Nasc. *</label>
+                        <input type="date" id="editDataNascimento" required>
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-field">
+                        <label for="editCPF">CPF *</label>
+                        <input type="text" id="editCPF" required> 
+                    </div>
+                    <div class="form-field">
+                        <label for="editTelefone">Telefone *</label>
+                        <input type="tel" id="editTelefone" required>
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-field half">
+                        <label for="editCEP">CEP</label>
+                        <input type="text" id="editCEP">
+                    </div>
+                    <div class="form-field half">
+                        <label for="editUF">UF</label>
+                        <input type="text" id="editUF">
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-field">
+                        <label for="editCidade">Cidade</label>
+                        <input type="text" id="editCidade">
+                    </div>
+                    <div class="form-field">
+                        <label for="editBairro">Bairro</label>
+                        <input type="text" id="editBairro">
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-field">
+                        <label for="editLogradouro">Logradouro</label>
+                        <input type="text" id="editLogradouro">
+                    </div>
+                    <div class="form-field half">
+                        <label for="editNumero">Número</label>
+                        <input type="text" id="editNumero">
+                    </div>
+                </div>
+                
+
                 <div class="form-buttons">
                     <button type="submit" class="btn-salvar" id="btnSalvar"><i class="fas fa-save"></i> Salvar</button>
                     <button type="button" class="btn-cancelar" onclick="cancelarEdicao()"><i class="fas fa-times"></i> Cancelar</button>
