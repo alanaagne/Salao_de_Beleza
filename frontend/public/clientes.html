@@ -9,8 +9,60 @@
 </head>
 <body>
     
-    <header class="header"></header>
-    <nav id="menuLateral" class="menu-lateral"></nav>
+    <header class="header">
+    <div class="header-left">
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="user-info">
+            <p class="greeting">Olá</p>
+            <p class="user-role">Administrador</p>
+        </div>
+    </div>
+    <div class="user-avatar">
+        <img src="/imagens/imagem-avatar.png" alt="Avatar">
+    </div>
+</header>
+
+<nav id="menuLateral" class="menu-lateral">
+    <div class="menu-top">
+        <div class="menu-user-info">
+            <p class="greeting">Olá</p>
+            <p class="user-role">Administrador</p>
+        </div>
+        <button class="fechar-menu">×</button>
+    </div>
+
+    <ul>
+        <li class="titulo"><i class="fas fa-home"></i> Início</li>
+
+        <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
+        <ul>
+            <li><a href="#">Novo serviço</a></li>
+            <li><a href="#">Verificar serviços</a></li>
+        </ul>
+
+        <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
+        <ul>
+            <li><a href="cliente.html">Clientes</a></li> 
+            <li><a href="#">Produtos</a></li>
+            <li><a href="funcionario.html">Funcionários</a></li> 
+        </ul>
+
+        <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
+        <ul>
+            <li><a href="#">Consulta de Agenda</a></li>
+            <li><a href="#">Ajuste de Agenda</a></li>
+        </ul>
+    </ul>
+
+    <div class="menu-footer">
+        <i class="fas fa-cog"></i> Configurações
+    </div>
+</nav>
+    
 
     <main class="main-content">
         
