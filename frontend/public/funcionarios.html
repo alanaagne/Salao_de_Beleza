@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Funcionário - Salão de Beleza</title>
-    <link rel="stylesheet" href="/frontend/public/css/funcionarios.css">
+    <title>Funcionários - Salão de Beleza</title>
+    <link rel="stylesheet" href="/frontend/public/css/funcionarios.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-left">
             <div class="menu-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </div>
             <div class="user-info">
                 <p class="greeting">Olá</p>
@@ -24,165 +19,143 @@
             </div>
         </div>
         <div class="user-avatar">
-            <img src="/imagens/imagem-avatar.png" alt="Avatar">
+             <img src="/imagens/imagem-avatar.png" alt="Avatar">
         </div>
     </header>
 
+    <nav id="menuLateral" class="menu-lateral">
+        <div class="menu-top">
+            <div class="menu-user-info"><p class="greeting">Olá</p><p class="user-role">Administrador</p></div>
+            <button class="fechar-menu">×</button>
+        </div>
+        <ul>
+            <li class="titulo"><i class="fas fa-home"></i> Início</li>
+            <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
+            <ul>
+                <li><a href="#">Novo serviço</a></li>
+                <li><a href="#">Verificar serviços</a></li>
+            </ul>
+            <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
+            <ul>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="#">Produtos</a></li>
+                <li><a href="#">Funcionários</a></li>
+            </ul>
+            <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
+            <ul>
+                <li><a href="#">Consulta de Agenda</a></li>
+                <li><a href="#">Ajuste de Agenda</a></li>
+            </ul>
+        </ul>
+        <div class="menu-footer"><i class="fas fa-cog"></i> Configurações</div>
+    </nav>
 
-
-  <!-- ✅ MENU LATERAL (adicione logo aqui) -->
-  <nav id="menuLateral" class="menu-lateral">
-    <div class="menu-top">
-  <div class="menu-user-info">
-    <p class="greeting">Olá</p>
-    <p class="user-role">Administrador</p>
-  </div>
-  <button class="fechar-menu">×</button>
-</div>
-
-
-
-    <ul>
-      <li class="titulo"><i class="fas fa-home"></i> Início</li>
-
-      <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
-      <ul>
-        <li><a href="#">Novo serviço</a></li>
-        <li><a href="#">Verificar serviços</a></li>
-      </ul>
-
-      <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
-      <ul>
-        <li><a href="#">Clientes</a></li>
-        <li><a href="#">Produtos</a></li>
-        <li><a href="#">Funcionários</a></li>
-      </ul>
-
-      <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
-      <ul>
-        <li><a href="#">Consulta de Agenda</a></li>
-        <li><a href="#">Ajuste de Agenda</a></li>
-      </ul>
-    </ul>
-
-<div class="menu-footer">
-  <i class="fas fa-cog"></i> Configurações
-</div>
-
-  </nav>
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Formulário de Edição -->
-        <div class="edit-form-container">
-            <div class="form-title">
-                <h1>Editar Funcionário</h1>
+        <div id="view-registro">
+            <div class="form-title"><h1>Registro de Funcionário</h1></div>
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                     <button id="btn-novo-cadastro" class="btn-cadastrar"><i class="fas fa-plus"></i> Cadastrar</button>
+                     <input type="text" id="input-pesquisa" class="search-input" placeholder="Pesquisar Cadastrados">
+                     <button class="btn-search"><i class="fas fa-search"></i></button>
+                </div>
             </div>
-            
-            <form id="formEditarFuncionario">
-                <input type="hidden" id="editId">
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input type="text" id="editNome" placeholder="Digite seu nome." required>
-                    </div>
-                    <div class="form-group">
-                        <label>CPF</label>
-                        <input type="text" id="editCPF" placeholder="000.000.000-00" required>
-                    </div>
-                    <div class="form-group">
-                        <label>RG</label>
-                        <input type="text" id="editRG" placeholder="00.000.000-0" required>
-                    </div>
-                </div>
+            <div class="table-container">
+                <table class="funcionarios-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Nome</th><th>Cargo</th><th>Telefone</th><th>Editar</th><th>Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-funcionarios">
+                        </tbody>
+                </table>
+            </div>
+        </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>CEP</label>
-                        <input type="text" id="editCEP" placeholder="00000-000" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cidade</label>
-                        <input type="text" id="editCidade" placeholder="Digite o nome da cidade." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Endereço</label>
-                        <input type="text" id="editEndereco" placeholder="Digite o endereço." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Telefone</label>
-                        <input type="text" id="editTelefone" placeholder="(00)00000-0000" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Cargo</label>
-                        <input type="text" id="editCargo" placeholder="Digite o cargo." required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="editEmail" placeholder="Digite seu e-mail." required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Salário</label>
-                        <input type="text" id="editSalario" placeholder="R$ 0,00" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Data de Admissão</label>
-                        <input type="date" id="editDataAdmissao" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Ativo</label>
-                        <select id="editAtivo" required>
-                            <option value="">Selecione</option>
-                            <option value="1">Ativo</option>
-                            <option value="0">Inativo</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-buttons">
-            <button type="submit" class="btn-salvar" id="btnSalvar">
-            <i class="fas fa-save"></i> Salvar
-</button>
-
-<button type="button" class="btn-cancelar" onclick="cancelarEdicao()">
-  <i class="fas fa-times"></i> Cancelar
-</button>
-
-                </div>
-            </form>
+        <div id="view-cadastro" style="display: none;">
+            <div class="edit-form-container">
+                <div class="form-title"><h1 id="form-title-text">Cadastro de Funcionário</h1></div>
+                <form id="form-funcionario">
+    <input type="hidden" id="cpf-original" name="cpf-original">
+    <div class="form-row">
+        <div class="form-group"><label>Nome</label><input type="text" id="nome" name="nome" placeholder="Digite o nome completo" required></div>
+        <div class="form-group"><label>CPF</label><input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required></div>
+        <div class="form-group"><label>RG</label><input type="text" id="rg" name="rg" placeholder="00.000.000-0" maxlength="9" required></div>
+    </div>
+    <div class="form-row">
+        <div class="form-group"><label>CEP</label><input type="text" id="cep" name="cep" placeholder="00000-000" required></div>
+        <div class="form-group"><label>Cidade</label><input type="text" id="cidade" name="cidade" placeholder="Digite o nome da cidade" required></div>
+        <div class="form-group" style="grid-column: span 2;"><label>Endereço</label><input type="text" id="endereco" name="endereco" placeholder="Digite o endereço" required></div>
+    </div>
+    <div class="form-row">
+        <div class="form-group"><label>Telefone</label><input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000" required></div>
+       <div class="form-group">
+    <label>UF</label>
+    <select id="uf" name="uf" required>
+        <option value="" disabled selected>UF</option>
+        <option value="AC">Acre</option>
+        <option value="AL">Alagoas</option>
+        <option value="AP">Amapá</option>
+        <option value="AM">Amazonas</option>
+        <option value="BA">Bahia</option>
+        <option value="CE">Ceará</option>
+        <option value="DF">Distrito Federal</option>
+        <option value="ES">Espírito Santo</option>
+        <option value="GO">Goiás</option>
+        <option value="MA">Maranhão</option>
+        <option value="MT">Mato Grosso</option>
+        <option value="MS">Mato Grosso do Sul</option>
+        <option value="MG">Minas Gerais</option>
+        <option value="PA">Pará</option>
+        <option value="PB">Paraíba</option>
+        <option value="PR">Paraná</option>
+        <option value="PE">Pernambuco</option>
+        <option value="PI">Piauí</option>
+        <option value="RJ">Rio de Janeiro</option>
+        <option value="RN">Rio Grande do Norte</option>
+        <option value="RS">Rio Grande do Sul</option>
+        <option value="RO">Rondônia</option>
+        <option value="RR">Roraima</option>
+        <option value="SC">Santa Catarina</option>
+        <option value="SP">São Paulo</option>
+        <option value="SE">Sergipe</option>
+        <option value="TO">Tocantins</option>
+    </select>
+</div>
+        <div class="form-group"><label>Cargo</label><input type="text" id="cargo" name="cargo" placeholder="Digite o cargo" required></div>
+        <div class="form-group"><label>E-mail</label><input type="email" id="email" name="email" placeholder="email@exemplo.com" required></div>
+    </div>
+    <div class="form-row" style="grid-template-columns: 1fr 1fr 2fr;">
+        <div class="form-group"><label>Data de Admissão</label><input type="date" id="dataAdmissao" name="dataAdmissao" required></div>
+        <div class="form-group" id="status-group" style="display: none;"><label>Status</label><select id="status" name="status" required><option value="Ativo">Ativo</option><option value="Inativo">Inativo</option></select></div>
+    </div>
+    <div class="form-buttons">
+        <button type="submit" class="btn-salvar"><i class="fas fa-save"></i> Salvar</button>
+        <button type="button" class="btn-cancelar" id="btn-cancelar-form"><i class="fas fa-times"></i> Cancelar</button>
+    </div>
+</form>
+            </div>
         </div>
     </main>
 
-    <!-- Modal de Confirmação de Exclusão -->
-    <div id="modalExcluir" class="modal">
+    <div id="modal-confirmacao" class="modal">
         <div class="modal-content">
             <div class="modal-icon">❗</div>
             <p class="modal-text">Tem Certeza<br>de que deseja<br>executar essa<br>ação?</p>
             <div class="modal-buttons">
-                <button class="btn-confirmar" onclick="confirmarExclusao()">CONFIRMAR</button>
-                <button class="btn-cancelar-modal" onclick="fecharModal()">CANCELAR</button>
+                <button id="btn-modal-confirmar" class="btn-confirmar">CONFIRMAR</button>
+                <button id="btn-modal-cancelar" class="btn-cancelar-modal">CANCELAR</button>
             </div>
         </div>
     </div>
-
-    <!-- Modal de Sucesso -->
-    <div id="modalSucesso" class="modal">
-        <div class="modal-content">
+    <div id="modal-sucesso" class="modal">
+         <div class="modal-content">
             <div class="modal-icon-success">✓</div>
-            <p class="modal-text">Execução<br>feita com<br>sucesso!</p>
-            <div class="modal-buttons">
-                <button class="btn-voltar" onclick="fecharModalSucesso()">VOLTAR</button>
-            </div>
-        </div>
+            <p class="modal-text" id="sucesso-msg">Ação executada com sucesso!</p>
+         </div>
     </div>
-
-    <script src="./js/funcionarios.js"></script>
-
+    
+    <script src="/frontend/public/js/funcionarios.js"></script>
 </body>
 </html>

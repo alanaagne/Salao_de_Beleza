@@ -1,36 +1,31 @@
 // backend/src/controllers/funcionarioController.js
 
-// Importa a pool de conexão
 const connection = require('../config/db');
 
-// =================================================================
-// FUNÇÕES AUXILIARES
-// =================================================================
-
-// Função para limpar e converter o salário de R$ 0.000,00 para 0000.00
-function limparSalario(salarioStr) {
+// --- FUNÇÕES AUXILIARES ---
+const limparSalario = (salarioStr) => {
     if (!salarioStr) return 0.00;
-    // Remove o 'R$', pontos de milhar, e substitui a vírgula por ponto
-     const limpo = salarioStr.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
+    const limpo = salarioStr.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
     return parseFloat(limpo) || 0.00;
-}
+};
 
-// =================================================================
-// ROTAS DE CRUD (PADRÃO exports.nome)
-// =================================================================
+const limparCpf = (cpfStr) => {
+    if (!cpfStr) return '';
+    return cpfStr.replace(/\D/g, '');
+};
 
-// R: READ (Listar Todos)
+// --- ROTAS DE CRUD ---
+
+// R: READ (Listar Todos) - ✅ CORREÇÃO CRÍTICA APLICADA AQUI
 exports.list = async (req, res) => {
     try {
-        const [rows] = await connection.execute('SELECT * FROM profissional ORDER BY nome');
+        // Selecionamos explicitamente as colunas que o frontend precisa.
+        // Renomeamos 'especializacao' para 'cargo' usando 'AS'.
+        // Assumindo que você tem uma coluna de ID auto-incremento chamada 'id'. Se não tiver, o CPF será usado.
+        const sql = 'SELECT cpf AS id, cpf, nome, especializacao AS cargo, telefone FROM profissional ORDER BY nome';
+        const [rows] = await connection.execute(sql);
 
-        // Mapeamento e formatação de data para o frontend
-        const profissionais = rows.map(p => ({
-            ...p,
-            data_admissao: p.data_admissao ? new Date(p.data_admissao).toISOString().split('T')[0] : null
-        }));
-
-        return res.json(profissionais);
+        return res.json(rows);
     } catch (erro) {
         console.error('Erro ao buscar funcionários:', erro);
         return res.status(500).json({ error: 'Erro ao buscar a lista de funcionários.' });
@@ -40,53 +35,51 @@ exports.list = async (req, res) => {
 // C: CREATE (Criar Novo)
 exports.create = async (req, res) => {
     const dados = req.body;
-
     const salarioNumerico = limparSalario(dados.salario);
-    const statusDefault = 'Ativo';
-
+    const cpfLimpo = limparCpf(dados.cpf);
+    
     try {
-        const sql = `
- INSERT INTO profissional 
- (cpf, nome, salario, endereco, telefone, especializacao, rg, cep, cidade, email, data_admissao, status)
- VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`;
-
+        const sql = `INSERT INTO profissional (cpf, nome, salario, endereco, telefone, especializacao, rg, cep, cidade, email, data_admissao, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        
+        // ✅ CORREÇÃO APLICADA AQUI
         const values = [
-            dados.cpf, dados.nome, salarioNumerico, dados.endereco, dados.telefone,
-            dados.cargo, dados.rg, dados.cep, dados.cidade, dados.email,
-            dados.dataAdmissao, statusDefault
+            cpfLimpo,
+            dados.nome || null,
+            salarioNumerico,
+            dados.endereco || null,
+            dados.telefone || null,
+            dados.especializacao || dados.cargo || null, // Aceita 'especializacao' ou 'cargo'
+            dados.rg || null,
+            dados.cep || null,
+            dados.cidade || null,
+            dados.email || null,
+            dados.data_admissao || dados.dataAdmissao || null, // Aceita 'data_admissao' ou 'dataAdmissao'
+            'Ativo' // Status padrão no cadastro
         ];
 
-        const [resultado] = await connection.execute(sql, values);
-
-        return res.status(201).json({ id: resultado.insertId, cpf: dados.cpf, message: 'Funcionário cadastrado com sucesso.' });
+        await connection.execute(sql, values);
+        return res.status(201).json({ message: 'Funcionário cadastrado com sucesso.' });
     } catch (error) {
         console.error("Erro ao cadastrar funcionário:", error);
-
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(400).json({ error: 'CPF já cadastrado.' });
         }
-
         return res.status(400).json({ error: 'Erro ao cadastrar: ' + error.message });
     }
 };
-
-// R: READ (Buscar por CPF - Para edição)
+// R: READ (Buscar por CPF)
 exports.findByCpf = async (req, res) => {
-    const cpf = req.params.cpf;
+    const cpfLimpo = limparCpf(req.params.cpf);
     try {
-        const [rows] = await connection.execute('SELECT * FROM profissional WHERE cpf = ?', [cpf]);
+        const [rows] = await connection.execute('SELECT * FROM profissional WHERE cpf = ?', [cpfLimpo]);
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Funcionário não encontrado.' });
         }
-
         const profissional = rows[0];
         if (profissional.data_admissao) {
             profissional.data_admissao = new Date(profissional.data_admissao).toISOString().split('T')[0];
         }
-
         return res.json(profissional);
-
     } catch (error) {
         console.error('Erro ao buscar funcionário:', error);
         return res.status(500).json({ error: 'Erro interno ao buscar funcionário.' });
@@ -95,60 +88,44 @@ exports.findByCpf = async (req, res) => {
 
 // U: UPDATE (Editar)
 exports.update = async (req, res) => {
-    const cpf = req.params.cpf;
+    const cpfLimpo = limparCpf(req.params.cpf);
     const dados = req.body;
-    
-    // 1. Mapeamento e limpeza de dados
-    const salarioNumerico = limparSalario(dados.salario); // Calcula o valor numérico
-    const status = dados.status === '1' ? 'Ativo' : 'Inativo'; // Converte o status do front (1/0)
+    const salarioNumerico = limparSalario(dados.salario);
     
     try {
-        const sql = `
-            UPDATE profissional SET
-            nome = ?, salario = ?, endereco = ?, telefone = ?, especializacao = ?, 
-            rg = ?, cep = ?, cidade = ?, email = ?, data_admissao = ?, status = ?
-            WHERE cpf = ?
-        `;
+        const sql = `UPDATE profissional SET nome = ?, salario = ?, endereco = ?, telefone = ?, especializacao = ?, rg = ?, cep = ?, cidade = ?, email = ?, data_admissao = ?, status = ? WHERE cpf = ?`;
         
-        // 2. O array de valores (values) é a parte CRÍTICA:
-        //    Usamos '|| null' para garantir que NENHUM campo seja 'undefined', 
-        //    evitando o erro do driver mysql2/promise.
+        // ✅ CORREÇÃO APLICADA AQUI TAMBÉM PARA CONSISTÊNCIA
         const values = [
-            dados.nome || null, // 1.
-            salarioNumerico,    // 2. Usando o valor local calculado (CORRIGIDO)
-            dados.endereco || null, // 3.
-            dados.telefone || null, // 4.
-            dados.cargo || null,    // 5. Mapeado para 'especializacao'
-            dados.rg || null,       // 6.
-            dados.cep || null,      // 7.
-            dados.cidade || null,   // 8.
-            dados.email || null,    // 9.
-            dados.dataAdmissao || null, // 10. Mapeado para 'data_admissao'
-            status,             // 11. 
-            cpf                 // 12. WHERE condition
+            dados.nome || null,
+            salarioNumerico,
+            dados.endereco || null,
+            dados.telefone || null,
+            dados.especializacao || dados.cargo || null, // Aceita 'especializacao' ou 'cargo'
+            dados.rg || null,
+            dados.cep || null,
+            dados.cidade || null,
+            dados.email || null,
+            dados.data_admissao || dados.dataAdmissao || null, // Aceita 'data_admissao' ou 'dataAdmissao'
+            dados.status || 'Ativo',
+            cpfLimpo
         ];
 
         const [resultado] = await connection.execute(sql, values);
-
-        if (resultado.affectedRows === 0 && resultado.changedRows === 0) {
-            return res.status(404).json({ message: 'Funcionário não encontrado ou nenhum dado alterado.' });
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({ message: 'Funcionário não encontrado.' });
         }
-        
         return res.json({ message: 'Funcionário atualizado com sucesso.' });
-
     } catch (error) {
         console.error('Erro ao editar funcionário:', error);
-        // Retorna 400 Bad Request se houver falha na query (como CPF duplicado, mas a chave é a condição WHERE)
         return res.status(400).json({ error: 'Erro ao editar: ' + error.message });
     }
 };
-
 // D: DELETE (Deletar)
 exports.remove = async (req, res) => {
-    const cpf = req.params.cpf;
+    const cpfLimpo = limparCpf(req.params.cpf);
     try {
-        const [resultado] = await connection.execute('DELETE FROM profissional WHERE cpf = ?', [cpf]);
-
+        const [resultado] = await connection.execute('DELETE FROM profissional WHERE cpf = ?', [cpfLimpo]);
         if (resultado.affectedRows === 0) {
             return res.status(404).json({ message: 'Funcionário não encontrado.' });
         }

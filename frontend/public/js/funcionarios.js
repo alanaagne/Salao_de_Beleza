@@ -1,351 +1,233 @@
 // frontend/public/js/funcionarios.js
 
-// Configuração da API - Usando a porta 3000 e o endpoint padronizado
 const API_URL = 'http://localhost:3000/api/funcionarios';
-
-let cpfParaExcluir = null;
-let modoAtual = null; // 'cadastro' ou 'edicao'
-
-// =========================================================================
-// FUNÇÕES AUXILIARES DE FORMATAÇÃO E INTERFACE (Baseado no código da colega)
-// =========================================================================
-
-// Função para abrir/fechar menu lateral
-function toggleMenu() {
-    const menu = document.getElementById('menuLateral');
-    if (menu) {
-        menu.classList.toggle('aberto');
-    }
-}
-
-// Função para fechar modal de confirmação
-function fecharModal() {
-    document.getElementById('modalExcluir').style.display = 'none';
-}
-
-// Função para fechar modal de sucesso
-function fecharModalSucesso() {
-    document.getElementById('modalSucesso').style.display = 'none';
-}
-
-// Função para mostrar modal de sucesso (com fechamento automático)
-function mostrarModalSucesso() {
-    document.getElementById('modalSucesso').style.display = 'flex';
-
-    setTimeout(() => {
-        fecharModalSucesso();
-
-        // Se estiver em modo cadastro, limpa o formulário
-        if (modoAtual === 'cadastro') {
-            const formCadastro = document.getElementById('formCadastroFuncionario');
-            if (formCadastro) formCadastro.reset();
-        }
-
-        // Se estiver na tela de registro/listagem, recarrega
-        if (document.getElementById('tabela-profissionais')) {
-            carregarProfissionais();
-        } else {
-            // Se estiver na tela de edição e salvou, volta para a listagem
-            window.location.href = 'registro.html';
-        }
-
-    }, 3000);
-}
-
-// Função para abrir modal de confirmar salvamento
-function abrirModalConfirmarSalvar(modo) {
-    modoAtual = modo;
-    document.getElementById('modalExcluir').style.display = 'flex';
-}
-
-// Funções de formatação (Telefone e Data)
-function formatarTelefone(telefone) {
-    if (!telefone) return '';
-    const cleaned = telefone.replace(/\D/g, '');
-    if (cleaned.length === 11) {
-        return `(${cleaned.substr(0, 2)})${cleaned.substr(2, 5)}-${cleaned.substr(7)}`;
-    }
-    return telefone;
-}
-
-function formatarDataParaInput(data) {
-    if (!data) return '';
-    const date = new Date(data);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-// [ ... ADICIONAR A FUNÇÃO adicionarMascaras() COMPLETA AQUI ... ]
-// Esta função é essencial e deve vir do código da sua colega, incluindo todas as lógicas de máscara (CPF, RG, CEP, Salário, etc.)
-
-// =========================================================================
-// LÓGICA DE CRUD (CRIAR, LER, ATUALIZAR, DELETAR)
-// =========================================================================
-
-// C: CREATE (Chamada ao submeter o formulário de cadastro)
-function salvarCadastro(event) {
-    event.preventDefault();
-    const form = document.getElementById('formCadastroFuncionario');
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-
-    abrirModalConfirmarSalvar('cadastro');
-}
-
-// U: UPDATE (Chamada ao submeter o formulário de edição)
-function salvarEdicao(event) {
-    event.preventDefault();
-    const form = document.getElementById('formEditarFuncionario');
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-    console.log("oi");
-    abrirModalConfirmarSalvar('edicao');
-}
-
-
-// Função principal de envio: Cadastra (POST) ou Edita (PUT)
-async function confirmarSalvar() {
-    fecharModal();
-
-    // Define qual formulário e rota usar
-    const modo = modoAtual;
-    const formId = modo === 'cadastro' ? 'formCadastroFuncionario' : 'formEditarFuncionario';
-    const form = document.getElementById(formId);
-
-    const formData = new FormData(form);
-    const dadosFormulario = Object.fromEntries(formData.entries());
-
-    // Mapeamento dos campos (usando os IDs/Names do formulário dela)
-    const dadosParaEnvio = {
-        cpf: dadosFormulario.editCPF,
-        nome: dadosFormulario.editNome,
-        salario: dadosFormulario.editSalario, // Será limpo pelo backend
-        endereco: dadosFormulario.editEndereco,
-        telefone: dadosFormulario.editTelefone,
-        // O campo dela é 'Cargo', o seu é 'especializacao'
-        cargo: dadosFormulario.editCargo,
-        rg: dadosFormulario.editRG,
-        cep: dadosFormulario.editCEP,
-        cidade: dadosFormulario.editCidade,
-        email: dadosFormulario.editEmail,
-        dataAdmissao: dadosFormulario.editDataAdmissao,
-        // O campo 'ativo' só existe na edição e é crucial para o PUT
-        ativo: dadosFormulario.editAtivo || '1'
-    };
-
-    try {
-        const cpfURL = dadosParaEnvio.cpf; // Usamos o CPF como identificador
-        const url = modo === 'cadastro' ? API_URL : `${API_URL}/${cpfURL}`;
-        const method = modo === 'cadastro' ? 'POST' : 'PUT';
-
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dadosParaEnvio)
-        });
-
-        if (response.ok || response.status === 201) {
-            mostrarModalSucesso();
-        } else {
-            const error = await response.json();
-            alert(error.error || error.message || `Erro ao ${modo}.`);
-        }
-    } catch (error) {
-        console.error(`Erro ao ${modo}:`, error);
-        alert('Erro de conexão com o servidor.');
-    }
-}
-
-
-// R: READ (Função para buscar 1 funcionário e preencher o form de edição)
-async function editarFuncionario(cpf) {
-    try {
-        // 1. Busca os dados do funcionário
-        const response = await fetch(`${API_URL}/${cpf}`);
-        const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.message || 'Funcionário não encontrado.');
-            return;
-        }
-
-        // 2. Redireciona para a página de edição
-        // Se a lógica dela usa a mesma página para Edição, você teria que preencher os campos aqui.
-        // Já que você tem um arquivo funcionarios.html (que parece ser a edição), vamos passar o CPF pela URL
-        window.location.href = `funcionarios.html?cpf=${cpf}`;
-
-    } catch (error) {
-        console.error('Erro ao buscar dados para edição:', error);
-        alert('Não foi possível carregar dados para edição.');
-    }
-}
-
-// R: READ (Função para carregar a lista de funcionários na tela de Registro)
-async function carregarProfissionais() {
-    const tbody = document.querySelector('#tabela-profissionais tbody');
-    if (!tbody) return;
-
-    tbody.innerHTML = '';
-
-    try {
-        const response = await fetch(API_URL);
-        const profissionais = await response.json();
-
-        if (profissionais.length === 0) {
-            document.getElementById('mensagem-vazio').style.display = 'block';
-            return;
-        }
-        document.getElementById('mensagem-vazio').style.display = 'none';
-
-        profissionais.forEach(p => {
-            const row = tbody.insertRow();
-            row.insertCell().textContent = p.cpf;
-            row.insertCell().textContent = p.nome;
-            row.insertCell().textContent = p.especializacao;
-            row.insertCell().textContent = formatarTelefone(p.telefone);
-
-            // Botões de Ação
-            const acoesCell = row.insertCell();
-            acoesCell.innerHTML = `
-                <button class="btn-editar" onclick="editarFuncionario('${p.cpf}')">
-                    <i class="fas fa-pencil-alt"></i>
-                </button>
-                <button class="btn-excluir" onclick="abrirModalExcluir('${p.cpf}')">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            `;
-        });
-
-    } catch (error) {
-        console.error('Erro ao carregar a lista:', error);
-    }
-}
-
-
-// D: DELETE (Função de confirmação que envia o DELETE para a API)
-async function confirmarExclusao() {
-    fecharModal();
-    if (!cpfParaExcluir) return;
-
-    try {
-        const response = await fetch(`${API_URL}/${cpfParaExcluir}`, {
-            method: 'DELETE',
-        });
-
-        if (response.status === 204) { // 204 = No Content (Sucesso DELETE)
-            mostrarModalSucesso();
-        } else {
-            const error = await response.json().catch(() => ({ message: 'Erro desconhecido.' }));
-            alert(error.message || 'Erro ao excluir funcionário.');
-        }
-    } catch (error) {
-        alert('Erro de conexão ao excluir funcionário.');
-    }
-}
-
-
-// =========================================================================
-// LÓGICA DE CARREGAMENTO DA PÁGINA
-// =========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. LÓGICA DE EVENTOS GLOBAIS (MENU E MODAL)
-    // O menu e o botão de confirmar modal só são configurados UMA VEZ.
+    // --- Seleção de Elementos ---
+    const viewRegistro = document.getElementById('view-registro');
+    const viewCadastro = document.getElementById('view-cadastro');
+    const tabelaFuncionarios = document.getElementById('tabela-funcionarios');
+    const formFuncionario = document.getElementById('form-funcionario');
+    const formTitle = document.getElementById('form-title-text');
+    const btnNovoCadastro = document.getElementById('btn-novo-cadastro');
+    const btnCancelarForm = document.getElementById('btn-cancelar-form');
+    const inputPesquisa = document.getElementById('input-pesquisa');
+    const modalConfirmacao = document.getElementById('modal-confirmacao');
+    const modalSucesso = document.getElementById('modal-sucesso');
+    const btnModalConfirmar = document.getElementById('btn-modal-confirmar');
+    const btnModalCancelar = document.getElementById('btn-modal-cancelar');
     const menuToggle = document.querySelector('.menu-toggle');
-    if (menuToggle) {
-        menuToggle.addEventListener('click', toggleMenu);
-    }
-    const btnFecharMenu = document.querySelector('.fechar-menu');
-    if (btnFecharMenu) {
-        btnFecharMenu.addEventListener('click', toggleMenu);
-    }
+    const menuLateral = document.getElementById('menuLateral');
+    const fecharMenuBtn = document.querySelector('.fechar-menu');
 
-    // Configuração do botão de CONFIRMAR do modal (UNIFICADO)
-    const btnConfirmarModal = document.querySelector('#modalExcluir .btn-confirmar');
-    if (btnConfirmarModal) {
-        btnConfirmarModal.onclick = () => {
-            if (modoAtual === 'cadastro' || modoAtual === 'edicao') {
-                confirmarSalvar();
-            } else if (cpfParaExcluir) {
-                confirmarExclusao();
-            }
-        };
-    }
+    let funcionariosCache = [];
+    let cpfParaAcao = null;
+    let modoEdicao = false;
+
+    // --- Funções de Interface ---
+    const toggleMenu = () => menuLateral.classList.toggle('aberto');
+
+    const mostrarViewRegistro = () => {
+        viewCadastro.style.display = 'none';
+        viewRegistro.style.display = 'block';
+        formFuncionario.reset();
+        listarFuncionarios();
+    };
+
+    const mostrarViewCadastro = (isEdicao = false, dados = null) => {
+        viewRegistro.style.display = 'none';
+        viewCadastro.style.display = 'block';
+        formFuncionario.reset();
+        modoEdicao = isEdicao;
+
+        const campoCpf = document.getElementById('cpf');
+        const campoRg = document.getElementById('rg');
+        const campoDataAdmissao = document.getElementById('dataAdmissao');
+        const statusGroup = document.getElementById('status-group');
+
+        if (isEdicao && dados) {
+            formTitle.textContent = 'Editar Funcionário';
+            statusGroup.style.display = 'flex';
+            campoCpf.readOnly = true;
+            campoRg.readOnly = true;
+            campoDataAdmissao.readOnly = true;
+
+            document.getElementById('nome').value = dados.nome || '';
+            campoCpf.value = formatarCpf(dados.cpf || '');
+            document.getElementById('cpf-original').value = dados.cpf;
+            campoRg.value = dados.rg || '';
+            document.getElementById('cep').value = dados.cep || '';
+            document.getElementById('cidade').value = dados.cidade || '';
+            document.getElementById('endereco').value = dados.endereco || '';
+            document.getElementById('telefone').value = formatarTelefone(dados.telefone || '');
+            document.getElementById('uf').value = dados.uf || '';
+            document.getElementById('cargo').value = dados.especializacao || '';
+            document.getElementById('email').value = dados.email || '';
+            campoDataAdmissao.value = dados.data_admissao ? dados.data_admissao.split('T')[0] : '';
+            document.getElementById('status').value = dados.status || 'Ativo';
+        } else {
+            formTitle.textContent = 'Cadastro de Funcionário';
+            statusGroup.style.display = 'none';
+            campoCpf.readOnly = false;
+            campoRg.readOnly = false;
+            campoDataAdmissao.readOnly = false;
+        }
+    };
     
-    // -------------------------------------------------------------------
-    // 2. LÓGICA DE INICIALIZAÇÃO ESPECÍFICA DA PÁGINA (Executada uma única vez)
-    // -------------------------------------------------------------------
+    // --- Funções de Lógica ---
+    const listarFuncionarios = async () => {
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) throw new Error('Falha ao conectar com o servidor.');
+            funcionariosCache = await response.json();
+            renderizarTabela(funcionariosCache);
+        } catch (error) {
+            console.error(error);
+            tabelaFuncionarios.innerHTML = `<tr><td colspan="6">Não foi possível carregar os dados.</td></tr>`;
+        }
+    };
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const cpf = urlParams.get('cpf');
-    const formEdicao = document.getElementById('formEditarFuncionario');
-    const formCadastro = document.getElementById('formCadastroFuncionario');
-    const tabelaRegistro = document.getElementById('tabela-profissionais');
-
-
-    if (cpf && formEdicao) {
-        // MODO EDIÇÃO: Inicializa o formulário de edição
-        modoAtual = 'edicao';
-        formEdicao.addEventListener('submit', salvarEdicao);
-        carregarDadosNoFormulario(cpf);
-        adicionarMascaras(); 
-
-    } else if (tabelaRegistro) {
-        // MODO LISTAGEM: Inicializa a listagem
-        carregarProfissionais();
-    
-    } else if (formCadastro) {
-        // MODO CADASTRO: Inicializa o formulário de cadastro
-        modoAtual = 'cadastro';
-        formCadastro.addEventListener('submit', salvarCadastro);
-        adicionarMascaras();
-    }
-});
-
-// FUNÇÃO AUXILIAR PARA CARREGAR DADOS NO FORMULÁRIO DE EDIÇÃO
-async function carregarDadosNoFormulario(cpf) {
-    try {
-        const response = await fetch(`${API_URL}/${cpf}`);
-        const p = await response.json();
-
-        if (!response.ok) {
-            alert(p.message || 'Erro ao carregar dados do funcionário.');
+    const renderizarTabela = (dados) => {
+        tabelaFuncionarios.innerHTML = '';
+        if (!dados || dados.length === 0) {
+            tabelaFuncionarios.innerHTML = `<tr><td colspan="6">Nenhum funcionário cadastrado.</td></tr>`;
             return;
         }
+        dados.forEach((func, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${func.nome || ''}</td>
+                <td>${func.cargo || ''}</td>
+                <td>${formatarTelefone(func.telefone)}</td>
+                <td><i class="fas fa-pencil-alt btn-editar" data-cpf="${func.cpf}" style="cursor: pointer;"></i></td>
+                <td><i class="fas fa-trash-alt btn-excluir" data-cpf="${func.cpf}" style="cursor: pointer;"></i></td>
+            `;
+            tabelaFuncionarios.appendChild(tr);
+        });
+    };
 
-        // Preenche os campos do formulário (usando os IDs dela)
-        document.getElementById('editId').value = p.cpf; // Assume que o ID é o CPF
-        document.getElementById('editCPF').value = p.cpf;
-        document.getElementById('editNome').value = p.nome;
-        document.getElementById('editRG').value = p.rg;
-        document.getElementById('editCEP').value = p.cep;
-        document.getElementById('editCidade').value = p.cidade;
-        document.getElementById('editEndereco').value = p.endereco;
-        document.getElementById('editTelefone').value = formatarTelefone(p.telefone).replace(/[^0-9\(\)\-\s]/g, ''); // Preenche e deixa a máscara do JS agir
-        document.getElementById('editCargo').value = p.especializacao;
-        document.getElementById('editEmail').value = p.email;
+    const salvarFuncionario = async (event) => {
+        event.preventDefault();
+        const dados = Object.fromEntries(new FormData(formFuncionario).entries());
+        dados.cpf = (dados.cpf || '').replace(/\D/g, '');
+        dados.telefone = (dados.telefone || '').replace(/\D/g, '');
 
-        // Mapeamento de Status: Ativo='1', Inativo='0'
-        const statusValue = p.status === 'Ativo' ? '1' : '0';
-        document.getElementById('editAtivo').value = statusValue;
+        const url = modoEdicao ? `${API_URL}/${document.getElementById('cpf-original').value}` : API_URL;
+        const method = modoEdicao ? 'PUT' : 'POST';
 
-        // Data deve ser formatada para AAAA-MM-DD para o input type="date"
-        document.getElementById('editDataAdmissao').value = formatarDataParaInput(p.data_admissao);
+        try {
+            const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
+            if (!response.ok) {
+                const erro = await response.json();
+                throw new Error(erro.error || 'Erro ao salvar.');
+            }
+            mostrarModalSucesso(modoEdicao ? 'Atualizado com sucesso!' : 'Cadastrado com sucesso!');
+            setTimeout(() => { fecharModalSucesso(); mostrarViewRegistro(); }, 2000);
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+    
+    // Esta função busca OS DADOS COMPLETOS de um único funcionário
+    const carregarDadosParaEdicao = async (cpf) => {
+        try {
+            const response = await fetch(`${API_URL}/${cpf}`);
+            if (!response.ok) throw new Error('Funcionário não encontrado.');
+            const funcionario = await response.json();
+            mostrarViewCadastro(true, funcionario); // Passa os dados completos para o formulário
+        } catch(error) {
+            alert(error.message);
+        }
+    };
 
-        // Salário deve ser preenchido para a máscara funcionar no próximo 'input'
-        // NOTA: O Salário precisa ser preenchido com o valor numérico antes da máscara ser ativada
-        document.getElementById('editSalario').value = (p.salario || 0).toString().replace('.', ',');
+    const confirmarExclusao = async () => {
+        try {
+            const response = await fetch(`${API_URL}/${cpfParaAcao}`, { method: 'DELETE' });
+            if (response.status !== 204) {
+                 const erro = await response.json();
+                 throw new Error(erro.error || 'Erro ao excluir.');
+            }
+            mostrarModalSucesso('Excluído com sucesso!');
+            setTimeout(() => { fecharModalSucesso(); listarFuncionarios(); }, 2000);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            fecharModalConfirmacao();
+        }
+    };
 
-    } catch (error) {
-        console.error('Erro ao preencher formulário:', error);
+    // --- Funções Auxiliares ---
+    const abrirModalConfirmacao = (cpf) => { cpfParaAcao = cpf; modalConfirmacao.style.display = 'flex'; };
+    const fecharModalConfirmacao = () => modalConfirmacao.style.display = 'none';
+    const mostrarModalSucesso = (msg) => { document.getElementById('sucesso-msg').textContent = msg; modalSucesso.style.display = 'flex'; };
+    const fecharModalSucesso = () => modalSucesso.style.display = 'none';
+    const formatarCpf = (cpf) => {
+        if (!cpf) return '';
+        let digitos = cpf.replace(/\D/g, '').substring(0, 11);
+        if (digitos.length > 9) return digitos.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        if (digitos.length > 6) return digitos.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+        if (digitos.length > 3) return digitos.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+        return digitos;
+    };
+
+    const formatarCep = (cep) => {
+    if (!cep) return '';
+    let digitos = cep.replace(/\D/g, '').substring(0, 8);
+    if (digitos.length > 5) {
+        return digitos.replace(/(\d{5})(\d)/, '$1-$2');
     }
-}
+    return digitos;
+};
+    const formatarTelefone = (tel) => {
+        const digitos = (tel || '').replace(/\D/g, '');
+        if (digitos.length === 11) return digitos.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        if (digitos.length === 10) return digitos.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        return tel;
+    };
+    const aplicarMascaras = () => {
+    const cpfInput = document.getElementById('cpf');
+    const telefoneInput = document.getElementById('telefone');
+    const cepInput = document.getElementById('cep');
+
+    if (cpfInput) {
+        cpfInput.addEventListener('input', (e) => { e.target.value = formatarCpf(e.target.value); });
+    }
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', (e) => { e.target.value = formatarTelefone(e.target.value); });
+    }
+    if (cepInput) {
+        cepInput.addEventListener('input', (e) => { e.target.value = formatarCep(e.target.value); });
+    }
+};
+
+    // --- Vinculação de Eventos ---
+    btnNovoCadastro.addEventListener('click', () => mostrarViewCadastro(false));
+    btnCancelarForm.addEventListener('click', mostrarViewRegistro);
+    menuToggle.addEventListener('click', toggleMenu);
+    fecharMenuBtn.addEventListener('click', toggleMenu);
+    formFuncionario.addEventListener('submit', salvarFuncionario);
+    btnModalConfirmar.addEventListener('click', confirmarExclusao);
+    btnModalCancelar.addEventListener('click', fecharModalConfirmacao);
+    inputPesquisa.addEventListener('keyup', () => renderizarTabela(
+        funcionariosCache.filter(f => (f.nome || '').toLowerCase().includes(inputPesquisa.value.toLowerCase()))
+    ));
+    
+    // ✅ CORREÇÃO CRÍTICA ESTÁ AQUI:
+    // Agora, ao clicar no lápis, ele chama a função que busca os dados completos na API,
+    // em vez de usar os dados incompletos da lista.
+    tabelaFuncionarios.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.classList.contains('btn-editar')) {
+            carregarDadosParaEdicao(target.dataset.cpf);
+        }
+        if (target.classList.contains('btn-excluir')) {
+            abrirModalConfirmacao(target.dataset.cpf);
+        }
+    });
+
+    // --- Inicialização ---
+    mostrarViewRegistro();
+    aplicarMascaras();
+});

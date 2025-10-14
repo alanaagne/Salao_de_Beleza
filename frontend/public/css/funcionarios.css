@@ -82,6 +82,11 @@ body {
     border-radius: 50%;
     overflow: hidden;
 }
+input[readonly] {
+  background-color: #e9ecef; /* Um cinza claro e suave */
+  cursor: not-allowed;      /* Mostra um cursor de 'proibido' ao passar o mouse */
+  opacity: 0.9;             /* Deixa um pouco transparente para diferenciar */
+}
 
 .user-avatar img {
     width: 100%;
