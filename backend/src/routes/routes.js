@@ -6,6 +6,7 @@ const router = express.Router();
 //Importa o controller de Cliente
 const clienteController = require('../controllers/clienteController'); 
 const funcionarioController = require('../controllers/funcionarioController');
+const authRoutes = require('../controllers/loginController');
 
 // Rotas de Cliente 
 // A rota base definida no server.js é '/api', então essas rotas serão:
@@ -40,6 +41,12 @@ router.get('/funcionarios/:cpf', funcionarioController.findByCpf);
 router.put('/funcionarios/:cpf', funcionarioController.update);
 // D: DELETE
 router.delete('/funcionarios/:cpf', funcionarioController.remove);
+
+router.use('/auth', authRoutes);
+router.post('/auth/login', (req, res) => {
+    console.log("A ROTA DE LOGIN FOI ACESSADA!"); // <--- ADICIONE ESTA LINHA
+    // ...resto do seu código da rota
+});
 
 module.exports = router;
 

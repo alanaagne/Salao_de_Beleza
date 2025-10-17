@@ -1,0 +1,479 @@
+/* Importação da fonte Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset e estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: url('/imagens/fundo.jpg') no-repeat center center fixed; 
+    background-size: cover;
+    position: relative;
+}
+
+/* Estilos para as telas */
+.screen {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    z-index: 1;
+}
+
+/* Estilos para a tela inicial */
+#tela-inicial .content {
+    text-align: center;
+    color: #333;
+    z-index: 2;
+    position: relative;
+}
+
+.titulo {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+    color: black;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitulo {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 20px auto;
+    max-width: 400px;
+    color: black;
+    line-height: 1.4;
+}
+
+.btninicial {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s ease;
+    margin-top: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btninicial:hover {
+    background: linear-gradient(135deg, #ff5252, #f44336);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+}
+
+.btninicial:active {
+    transform: translateY(-1px);
+}
+
+/* Estilos para o modal de login e cadastro */
+.modal {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    gap: 10px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: #fff;
+    border-color: #ff5252;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.tab-btn:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #ff5252;
+    border-color: #ff5252;
+}
+
+/* Estilos para os campos de input */
+.modal-content {
+    margin-top: 20px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+    border-color: #ff5252;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.1);
+}
+
+input::placeholder {
+    color: #999;
+    font-weight: 400;
+}
+
+/* Estilos para links */
+.forgot-password {
+    color: #ff5252;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: block;
+    text-align: right;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #f44336;
+    text-decoration: underline;
+}
+
+/* Estilos para o botão principal */
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #ff5252, #f44336);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Estilos para o dashboard */
+.dashboard-content {
+    width: 90%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    z-index: 2;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 82, 82, 0.1);
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.btn-logout {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-logout:hover {
+    background: linear-gradient(135deg, #ff5252, #f44336);
+    transform: translateY(-2px);
+}
+
+.dashboard-body {
+    display: grid;
+    gap: 30px;
+}
+
+.user-info {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 107, 107, 0.2);
+}
+
+.user-info h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.user-info p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.services-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.service-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid rgba(255, 107, 107, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.service-card:hover {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: #ff5252;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.2);
+}
+
+.service-card h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Modal de mensagem */
+.message-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.message-modal.show {
+    display: flex;
+}
+
+.message-content {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    max-width: 400px;
+    text-align: center;
+}
+
+.message-text {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.message-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    font-weight: bold;
+}
+
+.message-close:hover {
+    color: #ff5252;
+}
+
+/* Loading spinner */
+.loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading.show {
+    display: flex;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 82, 82, 0.3);
+    border-top: 4px solid #ff5252;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .titulo {
+        font-size: 2.5rem;
+    }
+    
+    .subtitulo {
+        font-size: 1rem;
+        max-width: 300px;
+    }
+    
+    .modal {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .dashboard-title {
+        font-size: 1.8rem;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo {
+        font-size: 2rem;
+    }
+    
+    .modal {
+        padding: 15px;
+    }
+    
+    .tab-btn {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+    
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+}

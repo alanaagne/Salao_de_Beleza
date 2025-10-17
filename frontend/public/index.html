@@ -1,80 +1,77 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Expresso da Beleza</title>
-    <link rel="stylesheet" href="./css/style.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Expresso da Beleza</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <div id="mySidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h3 style="color:white; margin:0;">Início</h3>
-            <span class="close-btn" onclick="closeNav()">&times;</span>
+    <!-- Tela inicial -->
+    <div id="tela-inicial" class="screen active">
+        <div class="background-overlay"></div>
+        <div class="content">
+            <h1 class="titulo">Expresso<br>da<br>Beleza</h1>
+            <p class="subtitulo">Entre em um mundo de serviços personalizados que realçam sua beleza e bem-estar.</p>
+            <button class="btninicial" onclick="showLoginScreen()">Vamos Começar</button>
         </div>
-        
-        <div class="menu-group">
-            <div class="menu-title"><i class="fas fa-scissors"></i> Serviços</div>
-            <a href="#">Novo Serviço</a>
-            <a href="#">Verificar Serviços</a>
-        </div>
-
-        <div class="menu-group">
-            <div class="menu-title"><i class="fas fa-address-card"></i> Cadastro</div>
-            <a href="clientes.html">Clientes</a>
-            <a href="#">Produtos</a>
-            <a href="profissionais.html">Funcionários</a>
-        </div>
-
-        <div class="menu-group">
-            <div class="menu-title"><i class="far fa-calendar-alt"></i> Agenda</div>
-            <a href="#">Consulta de Agenda</a>
-            <a href="#">Ajuste de Agenda</a>
-        </div>
-
-        <a href="#" class="menu-title" style="border:none; margin-top: 20px;"><i class="fas fa-cog"></i> Configurações</a>
     </div>
 
-    <header class="header-admin">
-        <div class="header-bg-shape"></div> 
-        <div class="header-content">
-            <div class="menu-icon" onclick="openNav()"><i class="fas fa-bars"></i></div> 
-            <div class="welcome-message">Olá<br>Administrador</div>
-            <div class="user-avatar">
-                <img src="https://via.placeholder.com/50" alt="Avatar do Usuário"> 
+    <!-- Tela de login -->
+    <div id="tela-login" class="screen">
+        <div class="background-overlay"></div>
+        <div class="modal">
+            <div class="modal-header">
+                <button class="tab-btn active" id="login-tab" onclick="showSignup()">Inscrição</button>
+                <button class="tab-btn" id="signup-tab" onclick="showLoginScreen()">Sair</button>
+            </div>
+            <div class="modal-content">
+                <form id="login-form">
+                    <input type="email" id="login-email" placeholder="Email:" required>
+                    <input type="password" id="login-password" placeholder="Senha:" required>
+                    <a href="#" class="forgot-password" onclick="showForgotPassword()">Esqueceu a senha?</a>
+                    <button type="submit" class="btn-primary">Entrar</button>
+                </form>
             </div>
         </div>
-    </header>
+    </div>
 
-    <main class="main-content">
-        <h2>Serviços</h2>
-        <div class="service-grid">
-            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Penteados"><span>Penteados</span></div>
-            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Serviços Especiais"><span>Serviços Especiais</span></div>
-            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Escova"><span>Escova</span></div>
-            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Tratamentos"><span>Tratamentos</span></div>
-            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Manicure e Pedicure"><span>Manicure e Pedicure</span></div>
-            <div class="service-card"><img src="https://via.placeholder.com/150" alt="Maquiagem"><span>Maquiagem</span></div>
+    <!-- Tela de cadastro -->
+    <div id="tela-cadastro" class="screen">
+        <div class="background-overlay"></div>
+        <div class="modal">
+            <div class="modal-header">
+                <button class="tab-btn" id="signup-login-tab" onclick="showLogin()">Entrar</button>
+                <button class="tab-btn active" id="signup-signup-tab" onclick="showLoginScreen()">Sair</button>
+            </div>
+            <div class="modal-content">
+                <form id="signup-form">
+                    <input type="text" id="signup-name" placeholder="Nome" required>
+                    <input type="email" id="signup-email" placeholder="Email:" required>
+                    <input type="password" id="signup-password" placeholder="Senha:" required>
+                    <input type="password" id="signup-confirm-password" placeholder="Confirmar Senha:" required>
+                    <button type="submit" class="btn-primary">Inscrição</button>
+                </form>
+            </div>
         </div>
-    </main>
+    </div>
 
-    <footer class="navbar">
-        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i></a> 
-        <a href="#" class="nav-item"><i class="far fa-calendar-alt"></i></a> 
-        <a href="#" class="nav-item"><i class="fas fa-list-alt"></i></a> 
-        <a href="profissionais.html" class="nav-item"><i class="far fa-user"></i></a>
-    </footer>
+    <!-- Modal de mensagem -->
+    <div id="message-modal" class="message-modal">
+        <div class="message-content">
+            <span class="message-text" id="message-text"></span>
+            <button class="message-close" onclick="closeMessage()">&times;</button>
+        </div>
+    </div>
 
-    <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "var(--sidebar-width)";
-        }
+    <!-- Loading spinner -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+    </div>
 
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-        }
-    </script>
+    <script src="js/login.js"></script>
 </body>
 </html>
