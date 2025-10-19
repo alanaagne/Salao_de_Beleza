@@ -9,7 +9,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url('/imagens/imagem-fundo.png');
+    background-image: url('../imagens/imagem-fundo.png');
     background-size: 100% 100%; /* Largura 100%, Altura 100% - ocupa tela inteira */
     background-position: center center;
     background-repeat: no-repeat;
