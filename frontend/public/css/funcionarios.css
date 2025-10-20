@@ -99,7 +99,7 @@ input[readonly] {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    padding-top: 80px; /* Desce o conteúdo */
+    padding-top: 170px; /* Desce o conteúdo */
 }
 
 /* Page Title */
@@ -558,4 +558,10 @@ input[readonly] {
   color: #333;
   border-top: 1px solid rgba(0,0,0,0.1);
   padding-top: 10px;
+}
+
+
+.menu-lateral ul li.titulo a {
+    color: white;
+    text-decoration: none;
 }
