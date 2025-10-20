@@ -1,16 +1,27 @@
 // /backend/src/config/db.js
-//precisa da dependência instalada e o bd precisa estar local
+
 
 const mysql = require('mysql2/promise');
 
 const connection = mysql.createPool({
-    host: 'localhost', // Mude se seu BD estiver em outro lugar
-    user: 'root', // mude para Seu usuário do MySQL
-    password: 'admin', // Sua senha do MySQL
-    database: 'ExpressoDaBeleza', // O nome do banco que você criou
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    // O host é 'localhost' (se o Node e o MySQL estiverem na mesma máquina)
+    host: 'localhost', 
+    
+    // Geralmente o usuário é 'root'
+    user: 'root', 
+    
+    // Coloque a senha que você definiu durante a instalação do MySQL Installer.
+    password: ' ', 
+    
+    // O nome do banco de dados que você criou (e rodou o script SQL)
+    database: 'ExpressoDaBeleza', 
+
+    // CORREÇÃO FINAL PARA ACENTUAÇÃO
+    charset: 'utf8',
+    
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 module.exports = connection;
