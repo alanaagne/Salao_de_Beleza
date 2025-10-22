@@ -106,7 +106,7 @@ async function carregarClientes(termo = '') {
             const row = tableBody.insertRow();
             
             // O ID é um valor de exemplo, deve vir do BD (e.g., cliente.id)
-            row.insertCell(0).textContent = cliente.id || '1'; 
+            row.insertCell(0).textContent = cliente.ID || '1'; 
             
             row.insertCell(1).textContent = cliente.nome;
             row.insertCell(2).textContent = cliente.cidade;
