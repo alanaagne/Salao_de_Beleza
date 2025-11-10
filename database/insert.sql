@@ -26,12 +26,12 @@ INSERT INTO Cliente (nome, cidade, telefone, cpf, cep, uf, bairro, logradouro, n
 ('Renata Alves', 'Vitória da Conquista', '(77)99910-1010', '00011122210', '45077-110', 'BA', 'Miro Cairo', 'Av. Central', '99', '1990-02-28');
 
 -- Povoamento serviço
-INSERT INTO Servico (idTipo, nomeTipo, custoServico, tempoDuracao, descricao) VALUES
-(1, 'Progressiva', 50.00, '00:45:00', 'Corte e secagem simples.'),
-(2, 'Manicure Completa', 30.00, '00:40:00', 'Cutilagem e esmaltação tradicional.'),
-(3, 'Hidratação Capilar', 80.00, '01:00:00', 'Tratamento de hidratação profunda com máscara premium.'),
-(4, 'Coloração Raiz', 120.00, '02:00:00', 'Aplicação de tintura na raiz do cabelo.'),
-(5, 'Design de Sobrancelha', 45.00, '00:30:00', 'Design com pinça e cera.');
+INSERT INTO Servico (nomeTipo, custoServico, tempoDuracao, descricao) VALUES
+('Progressiva', 50.00, '00:45:00', 'Corte e secagem simples.'),
+('Manicure Completa', 30.00, '00:40:00', 'Cutilagem e esmaltação tradicional.'),
+('Hidratação Capilar', 80.00, '01:00:00', 'Tratamento de hidratação profunda com máscara premium.'),
+('Coloração Raiz', 120.00, '02:00:00', 'Aplicação de tintura na raiz do cabelo.'),
+('Design de Sobrancelha', 45.00, '00:30:00', 'Design com pinça e cera.');
 
 -- Povoamento produto
 INSERT INTO Produto (nomeProduto, valorVenda, categoriaProduto, descricao, dataCadastro, status) VALUES
@@ -43,9 +43,9 @@ INSERT INTO Produto (nomeProduto, valorVenda, categoriaProduto, descricao, dataC
 
 -- Povoamento Agendamento
 
-INSERT INTO Agendamento (codigo, status, dataHorarioInicial, dataHorarioFinal, dataSolicitacao, valor, cliente_id, cpf_profissional, servico_id) VALUES
-(101, 'realizado', '2025-11-15 10:00:00', '2025-11-15 10:45:00', CURDATE(), 50.00, 1, '22233344455', 1),
-(102, 'agendado', '2025-11-15 11:00:00', '2025-11-15 11:40:00', CURDATE(), 30.00, 2, '11122233344', 2),
-(103, 'agendado', '2025-11-16 14:00:00', '2025-11-16 16:00:00', CURDATE(), 120.00, 3, '88899900011', 4),
-(104, 'cancelado', '2025-11-16 09:30:00', '2025-11-16 10:30:00', CURDATE(), 80.00, 4, '33344455566', 3),
-(105, 'agendado', '2025-11-17 16:00:00', '2025-11-17 16:45:00', CURDATE(), 50.00, 10, '44455566677', 1);
+INSERT INTO Agendamento (status, dataHorarioInicial, dataHorarioFinal, dataSolicitacao, valor, cliente_id, cpf_profissional, servico_id) VALUES
+('realizado', '2025-11-15 10:00:00', '2025-11-15 10:45:00', CURDATE(), 50.00, 1, '22233344455', 1),
+('agendado', '2025-11-15 11:00:00', '2025-11-15 11:40:00', CURDATE(), 30.00, 2, '11122233344', 2),
+('agendado', '2025-11-16 14:00:00', '2025-11-16 16:00:00', CURDATE(), 120.00, 3, '88899900011', 4),
+('cancelado', '2025-11-16 09:30:00', '2025-11-16 10:30:00', CURDATE(), 80.00, 4, '33344455566', 3),
+('agendado', '2025-11-17 16:00:00', '2025-11-17 16:45:00', CURDATE(), 50.00, 10, '44455566677', 1);

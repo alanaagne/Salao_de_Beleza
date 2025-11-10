@@ -10,6 +10,7 @@ const router = express.Router();
 // Módulos Existentes
 const clienteController = require('../controllers/clienteController'); 
 const funcionarioController = require('../controllers/funcionarioController');
+const servicoController = require('../controllers/servicoController');
 
 // Módulos de Autenticação (É crucial para o seu login.js)
 const authController = require('../controllers/authController');       
@@ -44,6 +45,12 @@ router.put('/funcionarios/:cpf', funcionarioController.update);
 // DELETE
 router.delete('/funcionarios/:cpf', funcionarioController.remove);
 
+// Rotas de Serviço
+router.post('/servicos', servicoController.create); // CREATE
+router.get('/servicos', servicoController.list);   // READ ALL 
+router.get('/servicos/:idTipo', servicoController.findByidTipo); // READ 
+router.put('/servicos/:idTipo', servicoController.update); // UPDATE
+router.delete('/servicos/:idTipo', servicoController.remove); // DELETE
 
 
 //  ROTAS DE AUTENTICAÇÃO (/api/auth)

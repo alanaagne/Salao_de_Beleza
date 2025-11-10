@@ -45,7 +45,7 @@ CREATE TABLE cliente (
 -- 3. TABELA SERVICO
 
 CREATE TABLE Servico (
-    idTipo MEDIUMINT UNSIGNED PRIMARY KEY,
+    idTipo MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nomeTipo VARCHAR(255),
     custoServico DECIMAL(6,2) UNSIGNED,
     tempoDuracao TIME,
@@ -56,7 +56,7 @@ CREATE TABLE Servico (
 -- 4. TABELA AGENDAMENTO
 
 CREATE TABLE Agendamento (
-    codigo MEDIUMINT UNSIGNED PRIMARY KEY,
+    codigo MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     status ENUM('cancelado', 'realizado', 'agendado', 'em andamento'),
     dataHorarioInicial DATETIME,
     dataHorarioFinal DATETIME,
