@@ -11,6 +11,7 @@ const router = express.Router();
 const clienteController = require('../controllers/clienteController'); 
 const funcionarioController = require('../controllers/funcionarioController');
 const servicoController = require('../controllers/servicoController');
+const produtoController = require('../controllers/produtoController');
 
 // Módulos de Autenticação (É crucial para o seu login.js)
 const authController = require('../controllers/authController');       
@@ -52,10 +53,16 @@ router.get('/servicos/:idTipo', servicoController.findByidTipo); // READ
 router.put('/servicos/:idTipo', servicoController.update); // UPDATE
 router.delete('/servicos/:idTipo', servicoController.remove); // DELETE
 
+// Rotas de Produtos
+// Rotas de Produto
+router.post('/produtos', produtoController.create);      
+router.get('/produtos', produtoController.list);       
+router.get('/produtos/:id', produtoController.findById);
+router.put('/produtos/:id', produtoController.update); 
+router.delete('/produtos/:id', produtoController.remove);
+
 
 //  ROTAS DE AUTENTICAÇÃO (/api/auth)
-
-
 // POST /api/auth/login
 router.post('/auth/login', authController.login);
 // POST /api/auth/register
