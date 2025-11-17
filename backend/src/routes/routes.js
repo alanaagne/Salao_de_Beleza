@@ -12,6 +12,7 @@ const clienteController = require('../controllers/clienteController');
 const funcionarioController = require('../controllers/funcionarioController');
 const servicoController = require('../controllers/servicoController');
 const produtoController = require('../controllers/produtoController');
+const agendamentoController = require('../controllers/agendamentoController');
 
 // Módulos de Autenticação (É crucial para o seu login.js)
 const authController = require('../controllers/authController');       
@@ -70,6 +71,11 @@ router.post('/auth/register', authController.register);
 // GET /api/auth/verify
 router.get('/auth/verify', authController.verifyToken);
 
-
+// ROTAS DE AGENDAMENTO (/api/agendamentos)
+router.post('/agendamentos', agendamentoController.create);         // CREATE
+router.get('/agendamentos', agendamentoController.list);           // READ (com filtros)
+router.get('/agendamentos/:codigo', agendamentoController.findByCodigo); // READ (por PK)
+router.put('/agendamentos/:codigo', agendamentoController.update);     // UPDATE
+router.delete('/agendamentos/:codigo', agendamentoController.remove);   // DELETE
 
 module.exports = router;
