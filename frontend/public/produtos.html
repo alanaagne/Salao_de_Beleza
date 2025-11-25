@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produtos - Salão de Beleza</title>
+    <link rel="stylesheet" href="../public/css/produtos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    
+    <header class="header">
+        <div class="header-left">
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="user-info">
+                <p class="greeting">Olá</p>
+                <p class="user-role">Administrador</p>
+            </div>
+        </div>
+        <div class="user-avatar">
+            <img src="/imagens/imagem-avatar.png" alt="Avatar" class="avatar">
+        </div>
+    </header>
+
+<nav id="menuLateral" class="menu-lateral">
+    <div class="menu-top">
+        <div class="menu-user-info">
+            <p class="greeting">Olá</p>
+            <p class="user-role">Administrador</p>
+        </div>
+        <button class="fechar-menu">×</button>
+    </div>
+
+    <ul>
+        <li class="titulo"><i class="fas fa-home"></i> <a href="home.html">Início</a></li>
+
+        <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
+        <ul>
+            <li><a href="servicos.html">Gerenciar Serviços</a></li>
+            <li><a href="servicos.html">Verificar serviços</a></li>
+        </ul>
+
+        <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
+        <ul>
+            <li><a href="clientes.html">Clientes</a></li>
+            <li><a href="produtos.html">Produtos</a></li>
+            <li><a href="funcionarios.html">Funcionários</a></li>
+        </ul>
+
+        <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
+        <ul>
+            <li><a href="agendamento.html">Consulta de Agenda</a></li>
+            <li><a href="agendamento.html">Ajuste de Agenda</a></li>
+        </ul>
+    </ul>
+
+    <div class="menu-footer">
+        <i class="fas fa-cog"></i> Configurações
+    </div>
+</nav>
+    
+
+    <main class="main-content">
+        
+        <!-- TELA DE LISTAGEM -->
+        <div id="listagem-container" class="edit-form-container"> 
+            
+            <div class="form-title"> 
+                <h1>Registro de Produtos</h1>
+            </div>
+
+            <div class="search-bar">
+                <p class="search-label">Pesquisar Cadastrados</p>
+                <div class="search-input-wrapper">
+                    <button id="btn-show-create" class="btn-cadastrar"><i class="fas fa-plus"></i> Adicionar Produto</button>
+                    <input type="text" id="search-input" placeholder="Buscar por nome ou categoria" class="search-input">
+                    <button id="searchButton" class="btn-search"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="produtos-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome do Produto</th>
+                            <th>Categoria</th>
+                            <th>Valor (R$)</th>
+                            <th>Status</th>
+                            <th>Editar</th> 
+                            <th>Excluir</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="produtos-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- TELA DE FORMULÁRIO (CADASTRO/EDIÇÃO) -->
+        <div id="formulario-container" class="edit-form-container" style="display: none;">
+            
+            <div class="form-title">
+                <h1 id="form-title-text">Cadastrar Novo Produto</h1> 
+            </div>
+
+            <form id="formEditarProduto">
+    
+                <input type="hidden" id="editIdOriginal"> 
+
+                <!-- LINHA 1: Nome e Categoria -->
+                <div class="form-group-row">
+                    <div class="form-field" style="grid-column: span 2;">
+                        <label for="editNomeProduto">Nome do Produto *</label>
+                        <input type="text" id="editNomeProduto" placeholder="Digite o nome do produto" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="editCategoriaProduto">Categoria *</label>
+                        <input type="text" id="editCategoriaProduto" placeholder="Ex: Shampoo, Tintura" required>
+                    </div>
+                </div>
+
+                <!-- LINHA 2: Valor e Status -->
+                <div class="form-group-row">
+                    <div class="form-field">
+                        <label for="editValorVenda">Valor de Venda (R$) *</label>
+                        <input type="number" id="editValorVenda" placeholder="0.00" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="editStatus">Status *</label>
+                        <select id="editStatus" required>
+                            <option value="Disponível">Disponível</option>
+                            <option value="Indisponível">Indisponível</option>
+                            <option value="Em Falta">Em Falta</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="editDataCadastro">Data de Cadastro *</label>
+                        <input type="date" id="editDataCadastro" required>
+                    </div>
+                </div>
+
+                <!-- LINHA 3: Descrição -->
+                <div class="form-group-row">
+                    <div class="form-field" style="grid-column: span 3;">
+                        <label for="editDescricao">Descrição</label>
+                        <textarea id="editDescricao" placeholder="Descreva o produto (opcional)" rows="4"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn-salvar" id="btnSalvar"><i class="fas fa-save"></i> Gravar</button>
+                    <button type="button" class="btn-cancelar" onclick="cancelarEdicao()"><i class="fas fa-times"></i> Cancelar</button>
+                </div>
+            </form>
+        </div>
+        
+    </main>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
+    <div id="modalExcluir" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">❗</div>
+            <p class="modal-text">Tem Certeza<br>de que deseja<br>executar essa<br>ação?</p>
+            <div class="modal-buttons">
+                <button class="btn-confirmar" id="modal-delete-confirm">CONFIRMAR</button>
+                <button class="btn-cancelar-modal" onclick="fecharModal()">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SUCESSO -->
+    <div id="modalSucesso" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon-success">✓</div>
+            <p class="modal-text">Operação realizada<br>com sucesso!</p>
+            <div class="modal-buttons">
+                <button class="btn-voltar" onclick="fecharModalSucesso()">VOLTAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../public/js/produtos.js"></script>
+
+
+</body>
+</html>
