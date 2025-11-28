@@ -23,7 +23,7 @@ const baseQuery = `
         a.cpf_profissional, p.nome AS nome_profissional,
         a.servico_id, s.nomeTipo AS nome_servico
     FROM agendamento AS a
-    LEFT JOIN cliente AS c ON a.cliente_id = c.id
+    LEFT JOIN cliente AS c ON a.cliente_id = c.ID  
     LEFT JOIN profissional AS p ON a.cpf_profissional = p.cpf
     LEFT JOIN servico AS s ON a.servico_id = s.idTipo
 `;
@@ -139,27 +139,39 @@ exports.create = async (req, res) => {
 
 // READ (Listar Agendamentos) - Sem alterações
 exports.list = async (req, res) => {
-    // ... (esta função permanece igual à que você já tem) ...
     try {
-        const { data, cpf } = req.query; 
+        const { data, cpf, cliente } = req.query; // Adicionamos 'cliente' aqui
+        
         let query = baseQuery;
         let params = [];
         let whereClauses = [];
 
+        // Filtro por Data
         if (data) {
             whereClauses.push('DATE(a.dataHorarioInicial) = ?');
             params.push(data);
         }
+        
+        // Filtro por CPF do Profissional
         if (cpf) {
             whereClauses.push('a.cpf_profissional = ?');
             params.push(cpf);
         }
+
+        // ✅ NOVO FILTRO: Nome do Cliente (busca parcial)
+        if (cliente) {
+            whereClauses.push('c.nome LIKE ?');
+            params.push(`%${cliente}%`); // Adiciona % para buscar "contém"
+        }
+
         if (whereClauses.length > 0) {
             query += ' WHERE ' + whereClauses.join(' AND ');
         }
+
         query += ' ORDER BY a.dataHorarioInicial ASC';
 
         const [agendamentos] = await db.execute(query, params);
+
         res.status(200).json(agendamentos);
     } catch (error) {
         console.error('Erro ao listar agendamentos:', error);

@@ -67,16 +67,22 @@
             <div class="form-title"><h1>Registro de Agendamentos</h1></div>
             
             <div class="search-bar">
-                <div class="search-input-wrapper" style="justify-content: space-between;">
-                     <button id="btn-novo-cadastro" class="btn-cadastrar"><i class="fas fa-plus"></i> Novo Agendamento</button>
-                     
-                     <div class="form-group" style="margin-bottom: 0;">
-                        <label for="filtro-data" style="font-weight: bold; margin-right: 10px;">Filtrar por Data:</label>
-                        <input type="date" id="filtro-data" class="search-input" style="max-width: 200px;">
-                     </div>
-                </div>
-            </div>
+    <div class="search-input-wrapper" style="justify-content: space-between; align-items: end;">
+         <button id="btn-novo-cadastro" class="btn-cadastrar"><i class="fas fa-plus"></i> Novo Agendamento</button>
+         
+         <div style="display: flex; gap: 15px;">
+             <div class="form-group" style="margin-bottom: 0;">
+                <label for="filtro-cliente" style="font-weight: bold; margin-bottom: 5px; display: block;">Cliente:</label>
+                <input type="text" id="filtro-cliente" class="search-input" placeholder="Buscar por nome..." style="max-width: 200px; padding: 8px;">
+             </div>
 
+             <div class="form-group" style="margin-bottom: 0;">
+                <label for="filtro-data" style="font-weight: bold; margin-bottom: 5px; display: block;">Data:</label>
+                <input type="date" id="filtro-data" class="search-input" style="max-width: 160px; padding: 8px;">
+             </div>
+         </div>
+    </div>
+</div>
             <div class="table-container">
                 <table class="funcionarios-table">
                     <thead>
