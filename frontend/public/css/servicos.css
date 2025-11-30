@@ -470,7 +470,8 @@ body {
     justify-content: space-between;
 }
 
-.menu-lateral.aberto {
+/* CORRIGIDO: classe deve ser .menu-aberto (não .aberto) */
+.menu-lateral.menu-aberto {
     left: 0; 
 }
 

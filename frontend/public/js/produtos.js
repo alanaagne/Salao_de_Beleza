@@ -1,12 +1,13 @@
-// /frontend/public/js/produtos.js
+// /frontend/public/js/produtos.js - VERSÃO CORRIGIDA
 
 const API_URL = 'http://localhost:3000/api/produtos';
 
-// Aguarda o DOM carregar completamente
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Carregado - Iniciando sistema de produtos');
     
-    // REFERÊNCIAS GERAIS E DE TELA 
+    // =============================
+    // REFERÊNCIAS DO DOM
+    // =============================
     const form = document.getElementById('formEditarProduto');
     const tableBody = document.getElementById('produtos-table-body');
     const listContainer = document.getElementById('listagem-container');
@@ -15,12 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnShowCreate = document.getElementById('btn-show-create');
     const modalExcluir = document.getElementById('modalExcluir');
     const modalDeleteConfirmBtn = document.getElementById('modal-delete-confirm');
-    
-    // NOVAS REFERÊNCIAS PARA A BUSCA 
     const searchInput = document.getElementById('search-input'); 
     const searchButton = document.getElementById('searchButton'); 
     
-    // REFERÊNCIAS DOS INPUTS 
+    // Inputs do formulário
     const idOriginalInput = document.getElementById('editIdOriginal');
     const nomeProdutoInput = document.getElementById('editNomeProduto');
     const valorVendaInput = document.getElementById('editValorVenda');
@@ -29,25 +28,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const dataCadastroInput = document.getElementById('editDataCadastro');
     const statusInput = document.getElementById('editStatus');
     
-    // Menu Lateral
+    // Menu lateral
     const menuToggle = document.querySelector('.menu-toggle');
     const menuLateral = document.getElementById('menuLateral');
     const btnFecharMenu = document.querySelector('.fechar-menu');
     
     let idParaDeletar = null;
+
+    // ================================
+    // MENU LATERAL
+    // ================================
     
-    // Verificação de elementos
-    console.log('Botão Criar:', btnShowCreate);
-    console.log('Menu Toggle:', menuToggle);
+    function toggleMenu() {
+        if (menuLateral) {
+            menuLateral.classList.toggle('aberto');
+            console.log('Menu toggle - classe aberto:', menuLateral.classList.contains('aberto'));
+        }
+    }
     
+    if (menuToggle) {
+        menuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu();
+        });
+    }
     
-    // ====================================
-    // LÓGICA DE INTERFACE: Troca de Telas
-    // ====================================
+    if (btnFecharMenu) {
+        btnFecharMenu.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu();
+        });
+    }
+
+    // Fecha ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (menuLateral && menuLateral.classList.contains('aberto')) {
+            if (!menuLateral.contains(e.target) && !menuToggle.contains(e.target)) {
+                menuLateral.classList.remove('aberto');
+            }
+        }
+    });
+
+    // ================================
+    // FUNÇÕES DE TELA
+    // ================================
     
-    // Mostra o formulário no modo 'Cadastrar'
     window.mostrarFormularioCadastro = function() {
-        console.log('Abrindo formulário de cadastro');
         form.reset();
         idOriginalInput.value = '';
         formTitle.textContent = 'Cadastrar Novo Produto';
@@ -62,58 +90,64 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     
-    // Prepara e mostra o formulário no modo 'Editar'
     window.mostrarFormularioEdicao = function(produto) {
-        console.log('Abrindo formulário de edição', produto);
         preencherFormulario(produto); 
-        
         idOriginalInput.value = produto.id;
         formTitle.textContent = 'Editar Produto: ' + produto.nomeProduto;
         listContainer.style.display = 'none';
         formContainer.style.display = 'block';
-        
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     
-    // Volta para a tela de listagem
     window.cancelarEdicao = function() {
-        const isEditing = formContainer.style.display === 'block';
-    
-        if (isEditing && confirm('Deseja retornar?')) {
-            form.reset();
-            formContainer.style.display = 'none';
-            listContainer.style.display = 'block';
-            carregarProdutos();
-        } else if (!isEditing) {
-            form.reset();
-            formContainer.style.display = 'none';
-            listContainer.style.display = 'block';
-            carregarProdutos();
-        }
+        form.reset();
+        formContainer.style.display = 'none';
+        listContainer.style.display = 'block';
+        carregarProdutos();
     };
+
+    // ================================
+    // BUSCA (RF030)
+    // ================================
     
-    
-    // ====================================
-    // CRUD: Funções Principais
-    // ====================================
-    
-    // LÓGICA DE BUSCA
     function executarBusca() {
         const termo = searchInput.value.trim();
-        console.log('Executando busca:', termo);
         carregarProdutos(termo);
     }
     
-    // READ: Carregar e Exibir Produtos
+    if (searchButton) {
+        searchButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            executarBusca();
+        });
+    }
+    
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executarBusca();
+            }
+        });
+    }
+
+    if (btnShowCreate) {
+        btnShowCreate.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.mostrarFormularioCadastro();
+        });
+    }
+
+    // ================================
+    // LISTAR PRODUTOS (RF030)
+    // ================================
+    
     async function carregarProdutos(termo = '') {
         try {
             const urlComBusca = termo ? `${API_URL}?termo=${encodeURIComponent(termo)}` : API_URL;
-            console.log('Carregando produtos de:', urlComBusca);
-            
             const response = await fetch(urlComBusca);
             const produtos = await response.json();
-            
-            console.log('Produtos carregados:', produtos.length);
             
             tableBody.innerHTML = '';
             
@@ -131,19 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.insertCell(3).textContent = formatarValor(produto.valorVenda);
                 row.insertCell(4).textContent = produto.status || 'Disponível';
                 
-                // Codifica o objeto produto
-                const produtoJSONString = JSON.stringify(produto).replace(/"/g, '&quot;');
+                const produtoJSON = JSON.stringify(produto).replace(/"/g, '&quot;');
                 
-                // Coluna Editar
-                const editCell = row.insertCell(5); 
-                editCell.innerHTML = `
-                    <button class="btn-editar" onclick="mostrarFormularioEdicao(JSON.parse('${produtoJSONString}'))">
+                row.insertCell(5).innerHTML = `
+                    <button class="btn-editar" onclick='mostrarFormularioEdicao(${produtoJSON})'>
                         <i class="fas fa-pen"></i>
                     </button>`;
                 
-                // Coluna Excluir
-                const deleteCell = row.insertCell(6);
-                deleteCell.innerHTML = `
+                row.insertCell(6).innerHTML = `
                     <button class="btn-excluir" onclick="solicitarExclusao(${produto.id})">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -152,23 +181,25 @@ document.addEventListener('DOMContentLoaded', () => {
     
         } catch (error) {
             console.error('Erro ao carregar produtos:', error);
-            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Erro ao carregar dados. Verifique se o backend está ativo.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Operação não realizada com sucesso, timeout com banco de dados</td></tr>`;
         }
     }
+
+    // ================================
+    // CADASTRAR/ATUALIZAR (RF029/RF031)
+    // ================================
     
-    // CREATE / UPDATE: Submissão do Formulário
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault(); 
             
-            if (!form.checkValidity()) {
-                form.reportValidity();
+            // VALIDAÇÃO MANUAL (RF029 [9.1.2])
+            if (!validarCamposObrigatorios()) {
                 return;
             }
             
             const idOriginal = idOriginalInput.value;
             
-            // Coletando dados
             const dados = {
                 nomeProduto: nomeProdutoInput.value.trim(),
                 valorVenda: parseFloat(valorVendaInput.value),
@@ -196,14 +227,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error('Erro de rede na submissão:', error);
-                alert('Erro de rede. Verifique se o Backend está ativo.');
+                alert('Operação não realizada com sucesso, timeout com banco de dados');
             }
         });
     }
+
+    // ================================
+    // VALIDAÇÃO DE CAMPOS (RF029)
+    // ================================
     
-    // DELETE: Lógica de Exclusão
+    function validarCamposObrigatorios() {
+        const camposObrigatorios = [
+            { input: nomeProdutoInput, nome: 'Nome do Produto' },
+            { input: categoriaProdutoInput, nome: 'Categoria' },
+            { input: valorVendaInput, nome: 'Valor de Venda' },
+            { input: dataCadastroInput, nome: 'Data de Cadastro' },
+            { input: statusInput, nome: 'Status' }
+        ];
+
+        for (let campo of camposObrigatorios) {
+            if (!campo.input.value.trim()) {
+                alert(`Preencha este campo: ${campo.nome}`);
+                campo.input.focus();
+                return false;
+            }
+        }
+
+        // Validações adicionais
+        if (parseFloat(valorVendaInput.value) <= 0) {
+            alert('O valor de venda deve ser maior que zero.');
+            valorVendaInput.focus();
+            return false;
+        }
+
+        return true;
+    }
+
+    // ================================
+    // EXCLUIR (RF032)
+    // ================================
+    
     window.solicitarExclusao = function(id) {
-        console.log('Solicitando exclusão de:', id);
         idParaDeletar = id; 
         modalExcluir.style.display = 'flex';
     };
@@ -213,7 +277,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!idParaDeletar) return;
     
             try {
-                const response = await fetch(`${API_URL}/${idParaDeletar}`, { method: 'DELETE' });
+                const response = await fetch(`${API_URL}/${idParaDeletar}`, { 
+                    method: 'DELETE' 
+                });
     
                 if (response.ok) {
                     mostrarModalSucesso();
@@ -223,17 +289,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error('Erro de rede na exclusão:', error);
-                alert('Erro de rede. Verifique o Backend.');
+                alert('Operação não realizada com sucesso, timeout com banco de dados');
             } finally {
                 fecharModal();
             }
         });
     }
-    
-    
-    // ====================================
-    // Funções Auxiliares (Modals)
-    // ====================================
+
+    // ================================
+    // MODAIS
+    // ================================
     
     window.fecharModal = function() {
         modalExcluir.style.display = 'none';
@@ -248,8 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modalSucesso').style.display = 'none';
         window.cancelarEdicao();
     };
+
+    // ================================
+    // UTILITÁRIOS
+    // ================================
     
-    // Função auxiliar para preencher o form 
     function preencherFormulario(produto) {
         nomeProdutoInput.value = produto.nomeProduto || '';
         valorVendaInput.value = produto.valorVenda || '';
@@ -258,76 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dataCadastroInput.value = formatarDataParaInput(produto.dataCadastro) || '';
         statusInput.value = produto.status || 'Disponível';
     }
-    
-    
-    // ====================================
-    // EVENT LISTENERS
-    // ====================================
-    
-    // Botão de criar novo produto
-    if (btnShowCreate) {
-        btnShowCreate.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Botão Adicionar Produto clicado');
-            window.mostrarFormularioCadastro();
-        });
-    } else {
-        console.error('Botão btn-show-create não encontrado!');
-    }
-    
-    // EVENT LISTENERS DA BUSCA 
-    if (searchButton) {
-        searchButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            executarBusca();
-        });
-    }
-    
-    if (searchInput) {
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                executarBusca();
-            }
-        });
-    }
-    
-    // Menu Lateral - CORRIGIDO
-    if (menuToggle) {
-        menuToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Menu toggle clicado');
-            toggleMenu();
-        });
-    } else {
-        console.error('Menu toggle não encontrado!');
-    }
-    
-    if (btnFecharMenu) {
-        btnFecharMenu.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Botão fechar menu clicado');
-            toggleMenu();
-        });
-    }
-    
-    // Função para toggle do menu
-    function toggleMenu() {
-        if (menuLateral) {
-            menuLateral.classList.toggle('aberto');
-            console.log('Menu lateral classe aberto:', menuLateral.classList.contains('aberto'));
-        } else {
-            console.error('Menu lateral não encontrado!');
-        }
-    }
-    
-    
-    // ====================================
-    // FORMATAÇÃO
-    // ====================================
     
     function formatarValor(valor) {
         if (valor == null) return 'R$ 0,00';
@@ -339,21 +337,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function formatarDataParaInput(data) {
         if (!data) return '';
-        // Converte a data do banco para o formato YYYY-MM-DD
         const date = new Date(data);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
-    
-    
-    // ====================================
+
+    // ================================
     // INICIALIZAÇÃO
-    // ====================================
+    // ================================
     
-    // Inicia carregando a lista
     carregarProdutos();
-    
     console.log('Sistema de produtos inicializado com sucesso');
 });
