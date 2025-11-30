@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Carregado - Iniciando sistema de produtos');
     
     // =============================
-    // REFERÊNCIAS DO DOM
+    // REFERÊNCIAS DO DOMM
     // =============================
     const form = document.getElementById('formEditarProduto');
     const tableBody = document.getElementById('produtos-table-body');

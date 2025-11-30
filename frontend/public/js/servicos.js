@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Carregado - Iniciando sistema de serviços');
     
     // =============================
-    // REFERÊNCIAS DO DOM
+    // REFERÊNCIAS DO DOMM
     // =============================
     const form = document.getElementById('formEditarServico');
     const tableBody = document.getElementById('servicos-table-body');
