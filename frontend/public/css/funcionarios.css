@@ -565,3 +565,12 @@ input[readonly] {
     color: white;
     text-decoration: none;
 }
+
+/* Bloqueio visual para campos desabilitados (inputs e selects) */
+input:disabled, select:disabled, textarea:disabled {
+    background-color: #e9ecef; /* Fundo Cinza */
+    color: #6c757d;            /* Texto Cinza Escuro */
+    cursor: not-allowed;       /* Cursor de "Proibido" */
+    border: 1px solid #ced4da;
+    opacity: 1; /* Garante opacidade total em alguns navegadores */
+}

@@ -16,7 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const formTitle = document.getElementById('form-title-text');
     const btnNovoCadastro = document.getElementById('btn-novo-cadastro');
     const btnCancelarForm = document.getElementById('btn-cancelar-form');
+    
+    // Filtros
     const filtroData = document.getElementById('filtro-data');
+    const filtroCliente = document.getElementById('filtro-cliente');
+
     const modalConfirmacao = document.getElementById('modal-confirmacao');
     const modalSucesso = document.getElementById('modal-sucesso');
     const btnModalConfirmar = document.getElementById('btn-modal-confirmar');
@@ -40,37 +44,94 @@ document.addEventListener('DOMContentLoaded', () => {
         listarAgendamentos();
     };
 
+    // ✅ FUNÇÃO CORRIGIDA PARA DATA LOCAL
+    // Essa função garante que a data seja formatada usando o horário do Brasil (local),
+    // e não o horário UTC (Londres), resolvendo o problema do "dia seguinte".
+    const formatarDataParaInput = (dataString, isDateOnly = false) => {
+        let data;
+        
+        if (!dataString) {
+            // Se não passar data, usa a data/hora atual
+            data = new Date();
+        } else {
+            // Se passar data, cria o objeto
+            data = new Date(dataString);
+        }
+
+        // Pega as partes da data baseadas no horário LOCAL do computador
+        const ano = data.getFullYear();
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const dia = String(data.getDate()).padStart(2, '0');
+        const horas = String(data.getHours()).padStart(2, '0');
+        const minutos = String(data.getMinutes()).padStart(2, '0');
+
+        if (isDateOnly) {
+            return `${ano}-${mes}-${dia}`;
+        }
+        // Retorna formato para datetime-local: YYYY-MM-DDTHH:MM
+        return `${ano}-${mes}-${dia}T${horas}:${minutos}`;
+    };
+
     const mostrarViewCadastro = (isEdicao = false, dados = null) => {
         viewRegistro.style.display = 'none';
         viewCadastro.style.display = 'block';
         formAgendamento.reset();
         modoEdicao = isEdicao;
 
+        // Elementos do formulário
+        const elCliente = document.getElementById('cliente_id');
+        const elProfissional = document.getElementById('cpf_profissional');
+        const elServico = document.getElementById('servico_id');
+        const elInicio = document.getElementById('dataHorarioInicial');
+        const elFim = document.getElementById('dataHorarioFinal');
+        const elValor = document.getElementById('valor');
+        const elDataSol = document.getElementById('dataSolicitacao');
+        const elStatus = document.getElementById('status');
+        const btnSalvar = document.querySelector('.btn-salvar');
+
+        // 1. Reseta o estado dos campos (habilita tudo por padrão)
+        [elCliente, elProfissional, elServico, elInicio, elFim, elValor, elDataSol, elStatus].forEach(el => el.disabled = false);
+        if (btnSalvar) btnSalvar.style.display = 'inline-flex';
+
         if (isEdicao && dados) {
             formTitle.textContent = 'Editar Agendamento';
-            statusGroup.style.display = 'flex'; // Mostra o status na edição
+            statusGroup.style.display = 'flex';
             
             // Preenche o formulário
             document.getElementById('codigo-original').value = dados.codigo;
-            document.getElementById('cliente_id').value = dados.cliente_id;
-            document.getElementById('cpf_profissional').value = dados.cpf_profissional;
-            document.getElementById('servico_id').value = dados.servico_id;
-            document.getElementById('dataHorarioInicial').value = formatarDataParaInput(dados.dataHorarioInicial);
-            document.getElementById('dataHorarioFinal').value = formatarDataParaInput(dados.dataHorarioFinal);
-            document.getElementById('valor').value = dados.valor;
-            document.getElementById('dataSolicitacao').value = formatarDataParaInput(dados.dataSolicitacao, true);
-            document.getElementById('status').value = dados.status;
+            elCliente.value = dados.cliente_id;
+            elProfissional.value = dados.cpf_profissional;
+            elServico.value = dados.servico_id;
+            
+            // Usa a função corrigida para preencher as datas
+            elInicio.value = formatarDataParaInput(dados.dataHorarioInicial);
+            elFim.value = formatarDataParaInput(dados.dataHorarioFinal);
+            
+            elValor.value = dados.valor;
+            elDataSol.value = formatarDataParaInput(dados.dataSolicitacao, true);
+            elStatus.value = dados.status;
+
+            // Lógica de Bloqueio
+            if (dados.status === 'realizado') {
+                [elCliente, elProfissional, elServico, elInicio, elFim, elValor, elDataSol, elStatus].forEach(el => el.disabled = true);
+                if (btnSalvar) btnSalvar.style.display = 'none';
+            } else {
+                elCliente.disabled = true;
+                elDataSol.disabled = true;
+            }
 
         } else {
             formTitle.textContent = 'Novo Agendamento';
-            statusGroup.style.display = 'none'; // Esconde o status no cadastro
-            // Define a data de solicitação como hoje (readonly)
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('dataSolicitacao').value = hoje;
+            statusGroup.style.display = 'none';
+            
+            // ✅ CORREÇÃO AQUI TAMBÉM:
+            // Usa a função corrigida para pegar a data de HOJE no horário local
+            elDataSol.value = formatarDataParaInput(null, true);
+            elDataSol.disabled = true;
         }
     };
     
-    // --- Funções de Carregamento de Dados (Dropdowns) ---
+    // --- Funções de Carregamento de Dados ---
     const carregarSelect = async (url, selectId, valueField, textField) => {
         const selectElement = document.getElementById(selectId);
         try {
@@ -78,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`Falha ao carregar ${selectId}`);
             const data = await response.json();
             
-            selectElement.innerHTML = `<option value="" disabled selected>Selecione</option>`; // Limpa e adiciona placeholder
+            selectElement.innerHTML = `<option value="" disabled selected>Selecione</option>`;
             data.forEach(item => {
                 const option = document.createElement('option');
                 option.value = item[valueField];
@@ -94,10 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Funções de Lógica (CRUD) ---
     const listarAgendamentos = async () => {
         const data = filtroData.value;
-        let url = API_URL;
-        if (data) {
-            url += `?data=${data}`; // Adiciona o filtro de data à URL
-        }
+        const cliente = filtroCliente ? filtroCliente.value : '';
+
+        const params = new URLSearchParams();
+        if (data) params.append('data', data);
+        if (cliente) params.append('cliente', cliente);
+
+        const url = `${API_URL}?${params.toString()}`;
 
         try {
             const response = await fetch(url);
@@ -140,7 +204,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const dados = Object.fromEntries(new FormData(formAgendamento).entries());
+        const formData = new FormData(formAgendamento);
+        const dados = Object.fromEntries(formData.entries());
+
+        if (document.getElementById('cliente_id').disabled) {
+            dados.cliente_id = document.getElementById('cliente_id').value;
+        }
+        if (document.getElementById('dataSolicitacao').disabled) {
+            dados.dataSolicitacao = document.getElementById('dataSolicitacao').value;
+        }
+        dados.valor = dados.valor || document.getElementById('valor').value; 
+
         const url = modoEdicao ? `${API_URL}/${document.getElementById('codigo-original').value}` : API_URL;
         const method = modoEdicao ? 'PUT' : 'POST';
 
@@ -149,13 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!response.ok) {
                 const erro = await response.json();
-                // Erro de conflito de horário (409)
-                if (response.status === 409) {
+                if (response.status === 409 || response.status === 400 || response.status === 403) {
                     throw new Error(erro.error);
-                }
-                // Erro de validação (400)
-                if (response.status === 400) {
-                     throw new Error(erro.error);
                 }
                 throw new Error('Erro ao salvar agendamento.');
             }
@@ -183,6 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${API_URL}/${codigoParaAcao}`, { method: 'DELETE' });
             if (!response.ok) {
                  const erro = await response.json();
+                 if (response.status === 403) {
+                     throw new Error(erro.error);
+                 }
                  throw new Error(erro.error || 'Erro ao cancelar.');
             }
             mostrarModalSucesso('Agendamento cancelado com sucesso!');
@@ -215,16 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
 
-    const formatarDataParaInput = (dataString, isDateOnly = false) => {
-        if (!dataString) return '';
-        const data = new Date(dataString);
-        if (isDateOnly) {
-            return data.toISOString().split('T')[0];
-        }
-        // Formato para <input type="datetime-local"> é 'YYYY-MM-DDTHH:MM'
-        return data.toISOString().slice(0, 16);
-    };
-
     // --- Vinculação de Eventos ---
     btnNovoCadastro.addEventListener('click', () => mostrarViewCadastro(false));
     btnCancelarForm.addEventListener('click', mostrarViewRegistro);
@@ -234,8 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btnModalConfirmar.addEventListener('click', confirmarCancelamento);
     btnModalCancelar.addEventListener('click', fecharModalConfirmacao);
     
-    // Filtro de data
     filtroData.addEventListener('change', listarAgendamentos);
+    if (filtroCliente) {
+        filtroCliente.addEventListener('input', listarAgendamentos);
+    }
     
     tabelaAgendamentos.addEventListener('click', (e) => {
         const target = e.target;
@@ -249,8 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Inicialização ---
     mostrarViewRegistro();
-    // Carrega os dropdowns do formulário assim que a página é carregada
-    carregarSelect(CLIENTES_URL, 'cliente_id', 'id', 'nome');
+    carregarSelect(CLIENTES_URL, 'cliente_id', 'ID', 'nome');
     carregarSelect(FUNCIONARIOS_URL, 'cpf_profissional', 'cpf', 'nome');
     carregarSelect(SERVICOS_URL, 'servico_id', 'idTipo', 'nomeTipo');
 });
