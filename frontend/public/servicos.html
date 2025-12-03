@@ -26,42 +26,42 @@
         </div>
     </header>
 
-<nav id="menuLateral" class="menu-lateral">
-    <div class="menu-top">
-        <div class="menu-user-info">
-            <p class="greeting">Olá</p>
-            <p class="user-role">Administrador</p>
+    <nav id="menuLateral" class="menu-lateral">
+        <div class="menu-top">
+            <div class="menu-user-info">
+                <p class="greeting">Olá</p>
+                <p class="user-role">Administrador</p>
+            </div>
+            <button class="fechar-menu">×</button>
         </div>
-        <button class="fechar-menu">×</button>
-    </div>
 
-    <ul>
-        <li class="titulo"><i class="fas fa-home"></i> <a href="home.html">Início</a></li>
-
-        <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
         <ul>
-            <li><a href="servicos.html">Gerenciar Serviços</a></li>
-            <li><a href="servicos.html">Verificar serviços</a></li>
+            <li class="titulo"><i class="fas fa-home"></i> <a href="home.html">Início</a></li>
+
+            <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
+            <ul>
+                <li><a href="servicos.html">Gerenciar Serviços</a></li>
+                <li><a href="servicos.html">Verificar serviços</a></li>
+            </ul>
+
+            <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
+            <ul>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="funcionarios.html">Funcionários</a></li>
+            </ul>
+
+            <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
+            <ul>
+                <li><a href="agendamento.html">Consulta de Agenda</a></li>
+                <li><a href="agendamento.html">Ajuste de Agenda</a></li>
+            </ul>
         </ul>
 
-        <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
-        <ul>
-            <li><a href="clientes.html">Clientes</a></li>
-            <li><a href="produtos.html">Produtos</a></li>
-            <li><a href="funcionarios.html">Funcionários</a></li>
-        </ul>
-
-        <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
-        <ul>
-            <li><a href="agendamento.html">Consulta de Agenda</a></li>
-            <li><a href="agendamento.html">Ajuste de Agenda</a></li>
-        </ul>
-    </ul>
-
-    <div class="menu-footer">
-        <i class="fas fa-cog"></i> Configurações
-    </div>
-</nav>
+        <div class="menu-footer">
+            <i class="fas fa-cog"></i> Configurações
+        </div>
+    </nav>
     
 
     <main class="main-content">
@@ -110,21 +110,26 @@
 
             <form id="formEditarServico">
     
+                <!-- Campo oculto para armazenar o ID original (usado na edição) -->
                 <input type="hidden" id="editIdTipoOriginal"> 
 
-                <!-- LINHA 1: Código e Nome do Serviçoo -->
-                <div class="form-group-row">
+                <!-- LINHA 1: Campo Código (APENAS NA EDIÇÃO - DESABILITADO) -->
+                <div class="form-group-row" id="codigo-row" style="display: none;">
                     <div class="form-field">
-                        <label for="editIdTipo">Código do Serviço *</label>
-                        <input type="text" id="editIdTipo" placeholder="Digite o código" required>
+                        <label for="editIdTipo">Código do Serviço</label>
+                        <input type="text" id="editIdTipo" disabled style="background-color: #f0f0f0; cursor: not-allowed;">
                     </div>
-                    <div class="form-field" style="grid-column: span 2;">
+                </div>
+
+                <!-- LINHA 2: Nome do Serviço -->
+                <div class="form-group-row">
+                    <div class="form-field" style="grid-column: span 3;">
                         <label for="editNomeTipo">Nome do Serviço *</label>
                         <input type="text" id="editNomeTipo" placeholder="Digite o nome do serviço" required>
                     </div>
                 </div>
 
-                <!-- LINHA 2: Custo e Duração -->
+                <!-- LINHA 3: Custo e Duração -->
                 <div class="form-group-row">
                     <div class="form-field">
                         <label for="editCustoServico">Custo do Serviço (R$) *</label>
@@ -136,7 +141,7 @@
                     </div>
                 </div>
 
-                <!-- LINHA 3: Descrição -->
+                <!-- LINHA 4: Descrição -->
                 <div class="form-group-row">
                     <div class="form-field" style="grid-column: span 3;">
                         <label for="editDescricao">Descrição</label>
@@ -177,7 +182,6 @@
     </div>
 
     <script src="js/servicos.js"></script>
-
 
 </body>
 </html>

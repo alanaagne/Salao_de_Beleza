@@ -1,18 +1,15 @@
 // ================================
 // SERVICOS.JS - VERSÃO FINAL CORRIGIDA
+// Código do serviço é AUTO_INCREMENT
 // ================================
 
-
-const CLIENTES_URL = 'http://localhost:3000/api/clientes';
-const FUNCIONARIOS_URL = 'http://localhost:3000/api/funcionarios';
-const SERVICOS_URL = 'http://localhost:3000/api/servicos'
 const API_URL = 'http://localhost:3000/api/servicos';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Carregado - Iniciando sistema de serviços');
     
     // =============================
-    // REFERÊNCIAS DO DOMM
+    // REFERÊNCIAS DO DOM
     // =============================
     const form = document.getElementById('formEditarServico');
     const tableBody = document.getElementById('servicos-table-body');
@@ -32,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const custoServicoInput = document.getElementById('editCustoServico');
     const tempoDuracaoInput = document.getElementById('editTempoDuracao');
     const descricaoInput = document.getElementById('editDescricao');
+    const codigoRow = document.getElementById('codigo-row');
 
     // Menu lateral
     const menuToggle = document.querySelector('.menu-toggle');
@@ -95,7 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         idTipoOriginalInput.value = '';
         formTitle.textContent = 'Cadastrar Novo Serviço';
-        idTipoInput.disabled = false;
+        
+        // ESCONDE o campo código (será gerado automaticamente)
+        codigoRow.style.display = 'none';
+        
         listContainer.style.display = 'none';
         formContainer.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -105,7 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
         preencherFormulario(servico);
         idTipoOriginalInput.value = servico.idTipo;
         formTitle.textContent = 'Editar Serviço: ' + servico.nomeTipo;
-        idTipoInput.disabled = true; // Código imutável (RF027)
+        
+        // MOSTRA o campo código na edição (somente leitura)
+        codigoRow.style.display = 'grid';
+        idTipoInput.value = servico.idTipo;
+        
         listContainer.style.display = 'none';
         formContainer.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -203,13 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const idTipoOriginal = idTipoOriginalInput.value;
 
+            // DADOS DO FORMULÁRIO (SEM idTipo no cadastro)
             const dados = {
-                idTipo: idTipoInput.value.trim(),
                 nomeTipo: nomeTipoInput.value.trim(),
                 custoServico: parseFloat(custoServicoInput.value),
                 tempoDuracao: parseInt(tempoDuracaoInput.value),
                 descricao: descricaoInput.value.trim() || null
             };
+
+            // Se for EDIÇÃO, NÃO adiciona o idTipo (imutável)
+            // O backend usa o idTipo da URL para identificar qual atualizar
 
             let method = idTipoOriginal ? 'PUT' : 'POST';
             let url = idTipoOriginal ? `${API_URL}/${idTipoOriginal}` : API_URL;
@@ -225,13 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     mostrarModalSucesso();
                 } else {
                     const errorData = await response.json();
-                    
-                    // RF025 [9.3.2] - Mensagem específica para ID duplicado
-                    if (errorData.error && errorData.error.includes('já cadastrado')) {
-                        alert('Erro na operação: ID do serviço (idTipo) já cadastrado');
-                    } else {
-                        alert(`Erro: ${errorData.error}`);
-                    }
+                    alert(`Erro: ${errorData.error}`);
                 }
 
             } catch (error) {
@@ -247,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function validarCamposObrigatorios() {
         const camposObrigatorios = [
-            { input: idTipoInput, nome: 'Código do Serviço' },
             { input: nomeTipoInput, nome: 'Nome do Serviço' },
             { input: custoServicoInput, nome: 'Custo do Serviço' },
             { input: tempoDuracaoInput, nome: 'Tempo de Duração' }
@@ -338,7 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================
     
     function preencherFormulario(servico) {
-        idTipoInput.value = servico.idTipo || '';
         nomeTipoInput.value = servico.nomeTipo || '';
         custoServicoInput.value = servico.custoServico || '';
         tempoDuracaoInput.value = servico.tempoDuracao || '';
