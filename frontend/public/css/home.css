@@ -306,3 +306,9 @@ body {
     width: 28px;
     height: 28px;
 }
+
+.menu-lateral ul li.titulo a {
+    color: white;           /* deixa o texto branco */
+    text-decoration: none;  /* remove sublinhado */
+    display: block;         /* faz o clique pegar toda a área */
+}
