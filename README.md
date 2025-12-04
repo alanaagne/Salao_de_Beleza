@@ -37,15 +37,16 @@ A aplicação é dividida em Frontend (interface do usuário) e Backend (API Nod
 |   |   |-- /routes/                  (Definição dos Endpoints da API)
 |   |   |   |-- authRoutes.js
 |   |   |   |-- routes.js
-|   |   |-- .env                      (Variáveis de Ambiente)
-|   |   |-- server.js                 (Ponto de Entrada do Servidor)
-|   |   |-- test-db-connection.js
-|   |-- /database/                    (Scripts MySQL)
-|   |   |-- create.sql                (Criação de Tabelas)
-|   |   |-- insert.sql                (Povoamento Inicial)
-|   |   |-- user.sql                  (Criação de Usuário)
+|   |-- .env                          (Variáveis de Ambiente)
+|   |-- server.js                     (Ponto de Entrada do Servidor)
+|   |-- test-db-connection.js
 |   |-- package.json
 |   |-- package-lock.json
+|
+|-- /database/                        (Scripts MySQL)
+|   |-- create.sql                    (Criação de Tabelas)
+|   |-- insert.sql                    (Povoamento Inicial)
+|   |-- user.sql                      (Criação de Usuário)
 |
 |-- /frontend/
 |   |-- /public/
