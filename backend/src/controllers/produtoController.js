@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-// CREATE - Cadastrar Novo Produto
+// CREATE  
 exports.create = async (req, res) => {
     try {
         const { nomeProduto, valorVenda, categoriaProduto, descricao, dataCadastro, status } = req.body;
@@ -28,7 +28,7 @@ exports.create = async (req, res) => {
     }
 };
 
-// READ - Listar Produtos com Busca
+// READ Listar Produtos com Busca
 exports.list = async (req, res) => {
     try {
         const termoBusca = req.query.termo; 
@@ -53,7 +53,7 @@ exports.list = async (req, res) => {
     }
 };
 
-// READ - Buscar Produto por ID
+// READ Buscar Produto por ID
 exports.findById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -71,7 +71,7 @@ exports.findById = async (req, res) => {
     }
 };
 
-// UPDATE - Atualizar Produto
+// UPDATE Atualizar Produto
 exports.update = async (req, res) => {
     try {
         const { id } = req.params; 
@@ -93,7 +93,7 @@ exports.update = async (req, res) => {
     }
 };
 
-// DELETE - Remover Produto
+// DELETE Remover Produto
 exports.remove = async (req, res) => {
     try {
         const { id } = req.params; 

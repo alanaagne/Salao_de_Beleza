@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
-// Corrigindo a importação do banco de dados (provavelmente está em ../config/db.js)
+
 const connection = require('../config/db'); 
 const { generateToken, authenticateToken } = require('../middleware/auth');
 
@@ -48,7 +48,7 @@ router.post('/register', registerValidation, async (req, res) => {
         const { nome, email, senha } = req.body;
 
         // Verificar se o usuário já existe
-        // Use connection.execute se for mysql2/promise, ou connection.query se for mysql
+        
         const [existingUsers] = await connection.execute(
             'SELECT id FROM novoLogin WHERE email = ?',
             [email]

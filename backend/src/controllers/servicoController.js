@@ -75,7 +75,7 @@ exports.list = async (req, res) => {
 
 
 
-//  READ (Buscar Serviço por ID - PK)
+//  READ (Buscar Serviço por ID PK)
 
 exports.findByidTipo = async (req, res) => {
     try {

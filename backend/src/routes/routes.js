@@ -14,7 +14,7 @@ const servicoController = require('../controllers/servicoController');
 const produtoController = require('../controllers/produtoController');
 const agendamentoController = require('../controllers/agendamentoController');
 
-// Módulos de Autenticação (É crucial para o seu login.js)
+// Módulos de Autenticação 
 const authController = require('../controllers/authController');       
 
 
@@ -54,7 +54,7 @@ router.get('/servicos/:idTipo', servicoController.findByidTipo); // READ
 router.put('/servicos/:idTipo', servicoController.update); // UPDATE
 router.delete('/servicos/:idTipo', servicoController.remove); // DELETE
 
-// Rotas de Produtos
+
 // Rotas de Produto
 router.post('/produtos', produtoController.create);      
 router.get('/produtos', produtoController.list);       

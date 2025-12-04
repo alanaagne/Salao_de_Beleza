@@ -2,7 +2,7 @@
 
 const connection = require('../config/db');
 
-// --- FUNÇÕES AUXILIARES ---
+// FUNÇÕES AUXILIARES
 const limparSalario = (salarioStr) => {
     if (!salarioStr) return 0.00;
     const limpo = salarioStr.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
@@ -14,14 +14,13 @@ const limparCpf = (cpfStr) => {
     return cpfStr.replace(/\D/g, '');
 };
 
-// --- ROTAS DE CRUD ---
+//  ROTAS DE CRUD 
 
-// R: READ (Listar Todos) - ✅ CORREÇÃO CRÍTICA APLICADA AQUI
+// READ (Listar Todos) 
 exports.list = async (req, res) => {
     try {
-        // Selecionamos explicitamente as colunas que o frontend precisa.
-        // Renomeamos 'especializacao' para 'cargo' usando 'AS'.
-        // Assumindo que você tem uma coluna de ID auto-incremento chamada 'id'. Se não tiver, o CPF será usado.
+        // 'especializacao' para 'cargo' usando 'AS'.
+    
         const sql = 'SELECT cpf AS id, cpf, nome, especializacao AS cargo, telefone FROM profissional ORDER BY nome';
         const [rows] = await connection.execute(sql);
 
@@ -32,7 +31,7 @@ exports.list = async (req, res) => {
     }
 };
 
-// C: CREATE (Criar Novo)
+//  CREATE (Criar Novo)
 exports.create = async (req, res) => {
     const dados = req.body;
     const salarioNumerico = limparSalario(dados.salario);
@@ -41,7 +40,7 @@ exports.create = async (req, res) => {
     try {
         const sql = `INSERT INTO profissional (cpf, nome, salario, endereco, telefone, especializacao, rg, cep, cidade, email, data_admissao, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         
-        // ✅ CORREÇÃO APLICADA AQUI
+        
         const values = [
             cpfLimpo,
             dados.nome || null,
@@ -67,7 +66,7 @@ exports.create = async (req, res) => {
         return res.status(400).json({ error: 'Erro ao cadastrar: ' + error.message });
     }
 };
-// R: READ (Buscar por CPF)
+//  READ (Buscar por CPF)
 exports.findByCpf = async (req, res) => {
     const cpfLimpo = limparCpf(req.params.cpf);
     try {
@@ -86,7 +85,7 @@ exports.findByCpf = async (req, res) => {
     }
 };
 
-// U: UPDATE (Editar)
+//  UPDATE (Editar)
 exports.update = async (req, res) => {
     const cpfLimpo = limparCpf(req.params.cpf);
     const dados = req.body;
@@ -95,7 +94,7 @@ exports.update = async (req, res) => {
     try {
         const sql = `UPDATE profissional SET nome = ?, salario = ?, endereco = ?, telefone = ?, especializacao = ?, rg = ?, cep = ?, cidade = ?, email = ?, data_admissao = ?, status = ? WHERE cpf = ?`;
         
-        // ✅ CORREÇÃO APLICADA AQUI TAMBÉM PARA CONSISTÊNCIA
+        
         const values = [
             dados.nome || null,
             salarioNumerico,
@@ -121,7 +120,7 @@ exports.update = async (req, res) => {
         return res.status(400).json({ error: 'Erro ao editar: ' + error.message });
     }
 };
-// D: DELETE (Deletar)
+//  DELETE (Deletar)
 exports.remove = async (req, res) => {
     const cpfLimpo = limparCpf(req.params.cpf);
     try {

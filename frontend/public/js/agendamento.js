@@ -1,6 +1,6 @@
 // /frontend/public/js/agendamento.js
 
-// --- URLs da API ---
+//  URLs da API 
 const API_URL = 'http://localhost:3000/api/agendamentos';
 const CLIENTES_URL = 'http://localhost:3000/api/clientes';
 const FUNCIONARIOS_URL = 'http://localhost:3000/api/funcionarios';
@@ -8,7 +8,7 @@ const SERVICOS_URL = 'http://localhost:3000/api/servicos';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Seleção de Elementos ---
+    
     const viewRegistro = document.getElementById('view-registro');
     const viewCadastro = document.getElementById('view-cadastro');
     const tabelaAgendamentos = document.getElementById('tabela-agendamentos');
@@ -30,11 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const fecharMenuBtn = document.querySelector('.fechar-menu');
     const statusGroup = document.getElementById('status-group');
 
-    // --- Estado da Aplicação ---
+    //  Estado da Aplicação 
     let codigoParaAcao = null;
     let modoEdicao = false;
 
-    // --- Funções de Interface ---
+    //  Funções de Interface 
     const toggleMenu = () => menuLateral.classList.toggle('aberto');
 
     const mostrarViewRegistro = () => {
@@ -44,9 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         listarAgendamentos();
     };
 
-    // ✅ FUNÇÃO CORRIGIDA PARA DATA LOCAL
-    // Essa função garante que a data seja formatada usando o horário do Brasil (local),
-    // e não o horário UTC (Londres), resolvendo o problema do "dia seguinte".
+   
     const formatarDataParaInput = (dataString, isDateOnly = false) => {
         let data;
         
@@ -124,14 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
             formTitle.textContent = 'Novo Agendamento';
             statusGroup.style.display = 'none';
             
-            // ✅ CORREÇÃO AQUI TAMBÉM:
-            // Usa a função corrigida para pegar a data de HOJE no horário local
+            
             elDataSol.value = formatarDataParaInput(null, true);
             elDataSol.disabled = true;
         }
     };
     
-    // --- Funções de Carregamento de Dados ---
+    //  Funções de Carregamento de Dados 
     const carregarSelect = async (url, selectId, valueField, textField) => {
         const selectElement = document.getElementById(selectId);
         try {
@@ -152,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Funções de Lógica (CRUD) ---
+    // Funções de Lógica (CRUD)
     const listarAgendamentos = async () => {
         const data = filtroData.value;
         const cliente = filtroCliente ? filtroCliente.value : '';
@@ -266,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Funções Auxiliares (Modais e Formatação) ---
+    //  Funções Auxiliares (Modais e Formatação) 
     const abrirModalConfirmacao = (codigo) => { 
         codigoParaAcao = codigo; 
         document.getElementById('modal-confirmacao-texto').innerHTML = "Tem Certeza<br>de que deseja<br>cancelar este<br>agendamento?";
@@ -287,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
 
-    // --- Vinculação de Eventos ---
+    //  Vinculação de Eventos 
     btnNovoCadastro.addEventListener('click', () => mostrarViewCadastro(false));
     btnCancelarForm.addEventListener('click', mostrarViewRegistro);
     menuToggle.addEventListener('click', toggleMenu);
@@ -311,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Inicialização ---
+    //  Inicialização 
     mostrarViewRegistro();
     carregarSelect(CLIENTES_URL, 'cliente_id', 'ID', 'nome');
     carregarSelect(FUNCIONARIOS_URL, 'cpf_profissional', 'cpf', 'nome');

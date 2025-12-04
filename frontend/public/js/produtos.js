@@ -5,9 +5,9 @@ const API_URL = 'http://localhost:3000/api/produtos';
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Carregado - Iniciando sistema de produtos');
     
-    // =============================
+    
     // REFERÊNCIAS DO DOMM
-    // =============================
+    
     const form = document.getElementById('formEditarProduto');
     const tableBody = document.getElementById('produtos-table-body');
     const listContainer = document.getElementById('listagem-container');
@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let idParaDeletar = null;
 
-    // ================================
+    
     // MENU LATERAL
-    // ================================
+    
     
     function toggleMenu() {
         if (menuLateral) {
@@ -71,9 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ================================
+    
     // FUNÇÕES DE TELA
-    // ================================
+    
     
     window.mostrarFormularioCadastro = function() {
         form.reset();
@@ -106,9 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
         carregarProdutos();
     };
 
-    // ================================
+    
     // BUSCA (RF030)
-    // ================================
+    
     
     function executarBusca() {
         const termo = searchInput.value.trim();
@@ -139,9 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================================
+    
     // LISTAR PRODUTOS (RF030)
-    // ================================
+    
     
     async function carregarProdutos(termo = '') {
         try {
@@ -185,9 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ================================
+    
     // CADASTRAR/ATUALIZAR (RF029/RF031)
-    // ================================
+    
     
     if (form) {
         form.addEventListener('submit', async (e) => {
@@ -232,9 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================================
+    
     // VALIDAÇÃO DE CAMPOS (RF029)
-    // ================================
+    
     
     function validarCamposObrigatorios() {
         const camposObrigatorios = [
@@ -263,9 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
-    // ================================
+    
     // EXCLUIR (RF032)
-    // ================================
+    
     
     window.solicitarExclusao = function(id) {
         idParaDeletar = id; 
@@ -296,9 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================================
+    
     // MODAIS
-    // ================================
+    
     
     window.fecharModal = function() {
         modalExcluir.style.display = 'none';
@@ -314,9 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.cancelarEdicao();
     };
 
-    // ================================
+    
     // UTILITÁRIOS
-    // ================================
+    
     
     function preencherFormulario(produto) {
         nomeProdutoInput.value = produto.nomeProduto || '';
@@ -344,9 +344,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${year}-${month}-${day}`;
     }
 
-    // ================================
+    
     // INICIALIZAÇÃO
-    // ================================
+    
     
     carregarProdutos();
     console.log('Sistema de produtos inicializado com sucesso');

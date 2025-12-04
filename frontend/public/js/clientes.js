@@ -105,7 +105,7 @@ async function carregarClientes(termo = '') {
         clientes.forEach(cliente => {
             const row = tableBody.insertRow();
             
-            // O ID é um valor de exemplo, deve vir do BD (e.g., cliente.id)
+            // O ID é um valor de exemplo, deve vir do BD 
             row.insertCell(0).textContent = cliente.ID || '1'; 
             
             row.insertCell(1).textContent = cliente.nome;
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    //  FIM EVENT LISTENERS DA BUSCA 
+    
 
     // Menu Lateral
     const menuToggle = document.querySelector('.menu-toggle');

@@ -1,4 +1,4 @@
-/* Adicione estes estilos ao seu arquivo style.css existente */
+
 
 /* Reset e Config Global */
 * {
@@ -32,12 +32,12 @@ body {
     gap: 20px;
 }
 
-/* ===== ÍCONE DO MENU (3 LISTRAS) ===== */
+
 .menu-toggle {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  cursor: pointer;              /* Mostra a mãozinha de clique */
+  cursor: pointer;              
   padding: 8px;
   transition: background 0.2s;
   border-radius: 5px;
@@ -83,9 +83,9 @@ body {
     overflow: hidden;
 }
 input[readonly] {
-  background-color: #e9ecef; /* Um cinza claro e suave */
-  cursor: not-allowed;      /* Mostra um cursor de 'proibido' ao passar o mouse */
-  opacity: 0.9;             /* Deixa um pouco transparente para diferenciar */
+  background-color: #e9ecef; 
+  cursor: not-allowed;      
+  opacity: 0.9;            
 }
 
 .user-avatar img {

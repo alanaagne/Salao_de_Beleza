@@ -1,16 +1,13 @@
-// ================================
-// SERVICOS.JS - VERSÃO FINAL CORRIGIDA
-// Código do serviço é AUTO_INCREMENT
-// ================================
+
 
 const API_URL = 'http://localhost:3000/api/servicos';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Carregado - Iniciando sistema de serviços');
     
-    // =============================
+    
     // REFERÊNCIAS DO DOM
-    // =============================
+    
     const form = document.getElementById('formEditarServico');
     const tableBody = document.getElementById('servicos-table-body');
     const listContainer = document.getElementById('listagem-container');
@@ -38,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let idTipoParaDeletar = null;
 
-    // ================================
+    
     // MENU LATERAL
-    // ================================
+    
     
     function abrirMenu() {
         if (menuLateral) {
@@ -85,9 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================================
+    
     // FUNÇÕES DE TELA
-    // ================================
+    
     
     window.mostrarFormularioCadastro = function() {
         form.reset();
@@ -123,9 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
         carregarServicos();
     };
 
-    // ================================
+    
     // BUSCA (RF026)
-    // ================================
+    
     
     function executarBusca() {
         const termo = searchInput.value.trim();
@@ -148,9 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btnShowCreate.addEventListener('click', mostrarFormularioCadastro);
     }
 
-    // ================================
+    
     // LISTAR SERVIÇOS (RF026)
-    // ================================
+    
     
     async function carregarServicos(termo = '') {
         try {
@@ -193,9 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ================================
+    
     // CADASTRAR/ATUALIZAR (RF025/RF027)
-    // ================================
+   
     
     if (form) {
         form.addEventListener('submit', async (e) => {
@@ -216,8 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 descricao: descricaoInput.value.trim() || null
             };
 
-            // Se for EDIÇÃO, NÃO adiciona o idTipo (imutável)
-            // O backend usa o idTipo da URL para identificar qual atualizar
+            
 
             let method = idTipoOriginal ? 'PUT' : 'POST';
             let url = idTipoOriginal ? `${API_URL}/${idTipoOriginal}` : API_URL;
@@ -243,9 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================================
+    
     // VALIDAÇÃO DE CAMPOS (RF025)
-    // ================================
+    
     
     function validarCamposObrigatorios() {
         const camposObrigatorios = [
@@ -278,9 +274,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
-    // ================================
+    
     // EXCLUIR (RF028)
-    // ================================
+    
     
     window.solicitarExclusao = function(idTipo) {
         idTipoParaDeletar = idTipo;
@@ -312,9 +308,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================================
+    
     // MODAIS
-    // ================================
+    
     
     window.fecharModal = function() {
         fecharModalExcluir();
@@ -334,9 +330,9 @@ document.addEventListener('DOMContentLoaded', () => {
         cancelarEdicao();
     };
 
-    // ================================
+    
     // UTILITÁRIOS
-    // ================================
+    
     
     function preencherFormulario(servico) {
         nomeTipoInput.value = servico.nomeTipo || '';
@@ -353,9 +349,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ================================
+    
     // INICIALIZAÇÃO
-    // ================================
+    
     
     carregarServicos();
     console.log('Sistema de serviços inicializado com sucesso');

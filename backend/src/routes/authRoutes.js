@@ -10,7 +10,7 @@ router.post('/login', authController.login);
 // Rota POST para Cadastro (Inscrição)
 router.post('/register', authController.register);
 
-// Rota GET para Verificação de Token (Opcional, mas boa prática)
+// Rota GET para Verificação de Token 
 router.get('/verify', authController.verifyToken);
 
 module.exports = router;

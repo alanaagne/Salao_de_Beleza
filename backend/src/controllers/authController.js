@@ -6,7 +6,7 @@ const SIMULATED_TOKEN = 'mock-jwt-token-12345';
 const DEFAULT_USER = { id: 1, nome: 'Administrador', email: 'admin@salao.com', role: 'admin' };
 const DEFAULT_PASSWORD = '123456';
 
-// Login
+
 exports.login = async (req, res) => {
     console.log('=== LOGIN INICIADO ===');
     

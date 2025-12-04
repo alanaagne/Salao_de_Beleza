@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:3000/api/funcionarios';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Seleção de Elementos ---
+    // Seleção de Elementos 
     const viewRegistro = document.getElementById('view-registro');
     const viewCadastro = document.getElementById('view-cadastro');
     const tabelaFuncionarios = document.getElementById('tabela-funcionarios');
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let cpfParaAcao = null;
     let modoEdicao = false;
 
-    // --- Funções de Interface ---
+    //  Funções de Interface 
     const toggleMenu = () => menuLateral.classList.toggle('aberto');
 
     const mostrarViewRegistro = () => {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // --- Funções de Lógica ---
+    //  Funções de Lógica 
     const listarFuncionarios = async () => {
         try {
             const response = await fetch(API_URL);
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Funções Auxiliares ---
+    //  Funções Auxiliares 
     const abrirModalConfirmacao = (cpf) => { cpfParaAcao = cpf; modalConfirmacao.style.display = 'flex'; };
     const fecharModalConfirmacao = () => modalConfirmacao.style.display = 'none';
     const mostrarModalSucesso = (msg) => { document.getElementById('sucesso-msg').textContent = msg; modalSucesso.style.display = 'flex'; };
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 };
 
-    // --- Vinculação de Eventos ---
+    //  Vinculação de Eventos 
     btnNovoCadastro.addEventListener('click', () => mostrarViewCadastro(false));
     btnCancelarForm.addEventListener('click', mostrarViewRegistro);
     menuToggle.addEventListener('click', toggleMenu);
@@ -214,9 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         funcionariosCache.filter(f => (f.nome || '').toLowerCase().includes(inputPesquisa.value.toLowerCase()))
     ));
     
-    // ✅ CORREÇÃO CRÍTICA ESTÁ AQUI:
-    // Agora, ao clicar no lápis, ele chama a função que busca os dados completos na API,
-    // em vez de usar os dados incompletos da lista.
+    
     tabelaFuncionarios.addEventListener('click', (e) => {
         const target = e.target;
         if (target.classList.contains('btn-editar')) {
@@ -227,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Inicialização ---
+    //  Inicialização 
     mostrarViewRegistro();
     aplicarMascaras();
 });

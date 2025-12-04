@@ -32,7 +32,7 @@ function initializeApp() {
     const savedToken = sessionStorage.getItem('authToken');
     
     if (savedToken) {
-        // CORREÇÃO 1: Redireciona direto para a home se o token existir
+        
         window.location.href = '/home.html'; 
     } else {
         // Se não tem token, mostra a tela inicial (login/cadastro)
@@ -151,7 +151,7 @@ async function handleLogin(e) {
             
             showMessage('Login realizado com sucesso!', 'success');
             
-            // CORREÇÃO 2
+            
             setTimeout(() => {
                 window.location.href = '/home.html';
             }, 1500);
@@ -231,7 +231,7 @@ async function handleSignup(e) {
             
             showMessage('Cadastro realizado com sucesso!', 'success');
             
-            // CORREÇÃO 3
+            
             setTimeout(() => {
                 window.location.href = '/home.html';
             }, 1500);
@@ -277,7 +277,7 @@ async function verifyToken() {
         const data = await response.json();
         
         if (data.success) {
-            // CORREÇÃO 4
+            
            window.location.href = '/home.html';
         } else {
             // Token inválido, limpar dados

@@ -2,9 +2,9 @@
 
 const db = require('../config/db');
 
-// --- FUNÇÃO AUXILIAR DE VALIDAÇÃO ---
+//  FUNÇÃO AUXILIAR DE VALIDAÇÃO 
 const validarDadosAgendamento = (dados) => {
-    // ... (esta função permanece igual à que você já tem) ...
+    
     const { dataHorarioInicial, dataHorarioFinal, valor, cliente_id, cpf_profissional, servico_id } = dados;
     if (!dataHorarioInicial || !dataHorarioFinal || valor == null || !cliente_id || !cpf_profissional || !servico_id) {
         return 'Erro: Campos obrigatórios (data/hora, valor, cliente, profissional e serviço) não podem estar vazios.';
@@ -15,7 +15,7 @@ const validarDadosAgendamento = (dados) => {
     return null;
 };
 
-// --- CONSULTA BASE COM JOIN (INTEGRAÇÃO) ---
+// CONSULTA BASE COM JOIN (INTEGRAÇÃO)
 const baseQuery = `
     SELECT 
         a.codigo, a.status, a.dataHorarioInicial, a.dataHorarioFinal, a.dataSolicitacao, a.valor,
@@ -28,7 +28,7 @@ const baseQuery = `
     LEFT JOIN servico AS s ON a.servico_id = s.idTipo
 `;
 
-// ✅ --- NOVA FUNÇÃO AUXILIAR ---
+
 // Busca o status atual de um agendamento no banco
 const getStatusAgendamento = async (codigo) => {
     try {
@@ -42,10 +42,10 @@ const getStatusAgendamento = async (codigo) => {
     }
 };
 
-// --- FUNÇÃO AUXILIAR DE CONFLITO (ATUALIZADA) ---
+//  FUNÇÃO AUXILIAR DE CONFLITO 
 const verificarConflito = async (cpf, inicio, fim, codigoExcluir = null) => {
     try {
-        // --- ✅ REGRA DE NEGÓCIO 3: BLOQUEIO DE HORÁRIO DE ALMOÇO ---
+        //  BLOQUEIO DE HORÁRIO DE ALMOÇO 
         // Definindo o horário de almoço (12:00 às 13:00)
         const HORA_INICIO_ALMOCO = '12:00:00';
         const HORA_FIM_ALMOCO = '13:00:00';
@@ -62,7 +62,7 @@ const verificarConflito = async (cpf, inicio, fim, codigoExcluir = null) => {
             return true;
         }
 
-        // --- Verificação de conflito com outros agendamentos (lógica que já existia) ---
+        //  Verificação de conflito com outros agendamentos (lógica que já existia) 
         let sql = `
             SELECT COUNT(*) as conflitos 
             FROM agendamento 
@@ -86,9 +86,9 @@ const verificarConflito = async (cpf, inicio, fim, codigoExcluir = null) => {
     }
 };
 
-// =================================================================
+
 // ROTAS DE CRUD (PADRÃO exports.nome)
-// =================================================================
+
 
 // CREATE (Atualizado para usar a nova verificação de conflito)
 exports.create = async (req, res) => {
@@ -137,10 +137,10 @@ exports.create = async (req, res) => {
     }
 };
 
-// READ (Listar Agendamentos) - Sem alterações
+// READ (Listar Agendamentos) 
 exports.list = async (req, res) => {
     try {
-        const { data, cpf, cliente } = req.query; // Adicionamos 'cliente' aqui
+        const { data, cpf, cliente } = req.query; 
         
         let query = baseQuery;
         let params = [];
@@ -158,10 +158,10 @@ exports.list = async (req, res) => {
             params.push(cpf);
         }
 
-        // ✅ NOVO FILTRO: Nome do Cliente (busca parcial)
+        //  Nome do Cliente (busca parcial)
         if (cliente) {
             whereClauses.push('c.nome LIKE ?');
-            params.push(`%${cliente}%`); // Adiciona % para buscar "contém"
+            params.push(`%${cliente}%`); 
         }
 
         if (whereClauses.length > 0) {
@@ -179,9 +179,9 @@ exports.list = async (req, res) => {
     }
 };
 
-// READ (Buscar Agendamento por Código) - Sem alterações
+// READ (Buscar Agendamento por Código) 
 exports.findByCodigo = async (req, res) => {
-    // ... (esta função permanece igual à que você já tem) ...
+    
      try {
         const { codigo } = req.params;
         const query = baseQuery + ' WHERE a.codigo = ?';
@@ -203,7 +203,7 @@ exports.update = async (req, res) => {
         const { codigo } = req.params;
         const dados = req.body;
 
-        // --- ✅ REGRA DE NEGÓCIO 2: NÃO ALTERAR AGENDAMENTO REALIZADO ---
+        //  NÃO ALTERAR AGENDAMENTO REALIZADO 
         const statusAtual = await getStatusAgendamento(codigo);
         if (statusAtual === 'realizado') {
             return res.status(403).json({ error: 'Não é possível alterar um agendamento que já foi realizado.' });
@@ -211,9 +211,9 @@ exports.update = async (req, res) => {
         if (statusAtual === null) {
             return res.status(404).json({ message: 'Agendamento não encontrado para atualização.' });
         }
-        // --- Fim da Regra 2 ---
+        
 
-        // 1. Validação de campos (horário, etc.)
+        // 1. Validação de campos 
         const erroValidacao = validarDadosAgendamento(dados);
         if (erroValidacao) {
             return res.status(400).json({ error: erroValidacao });
@@ -252,7 +252,7 @@ exports.update = async (req, res) => {
         const [result] = await db.execute(sql, values);
 
         if (result.affectedRows === 0) {
-             // Esta verificação agora é redundante por causa do getStatusAgendamento, mas mantemos por segurança
+             
             return res.status(404).json({ message: 'Agendamento não encontrado para atualização.' });
         }
 
@@ -263,12 +263,12 @@ exports.update = async (req, res) => {
     }
 };
 
-// DELETE (ATUALIZADO COM AS NOVAS REGRAS)
+// DELETE 
 exports.remove = async (req, res) => {
     try {
         const { codigo } = req.params; 
 
-        // --- ✅ REGRA DE NEGÓCIO 1: NÃO CANCELAR AGENDAMENTO REALIZADO ---
+        //  NÃO CANCELAR AGENDAMENTO REALIZADO 
         const statusAtual = await getStatusAgendamento(codigo);
         if (statusAtual === 'realizado') {
             return res.status(403).json({ error: 'Não é possível cancelar um agendamento que já foi realizado.' });
@@ -276,7 +276,7 @@ exports.remove = async (req, res) => {
         if (statusAtual === null) {
             return res.status(404).json({ message: 'Agendamento não encontrado para cancelamento.' });
         }
-        // --- Fim da Regra 1 ---
+        
 
         // Executa o "soft delete" (cancelamento)
         const sql = "UPDATE agendamento SET status = 'cancelado' WHERE codigo = ?";

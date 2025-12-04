@@ -16,7 +16,7 @@ console.log('🔄 Iniciando servidor...');
 app.use(cors());
 app.use(express.json());
 
-// LOG MIDDLEWARE - ADICIONE ISSO
+// LOG MIDDLEWARE
 app.use((req, res, next) => {
     console.log('=== NOVA REQUISIÇÃO RECEBIDA ===');
     console.log(`📨 ${new Date().toLocaleTimeString()} - ${req.method} ${req.originalUrl}`);
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 console.log('🔗 Configurando rotas da API...');
 app.use('/api', routes);
 
-// MIDDLEWARE DE ERRO - ADICIONE ISSO NO FINAL
+// MIDDLEWARE DE ERRO 
 app.use((error, req, res, next) => {
     console.error('💥 ERRO NÃO TRATADO:', error);
     res.status(500).json({ 
@@ -52,7 +52,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-// ROTA DE FALLBACK - ADICIONE ISSO
+// ROTA DE FALLBACK 
 /*app.use('*', (req, res) => {
     console.log(`❌ Rota não encontrada: ${req.method} ${req.originalUrl}`);
     res.status(404).json({ 
