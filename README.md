@@ -131,8 +131,6 @@ node server.js
 
 - Express: Framework web para Node.js, utilizado para construir a API RESTful.
 
-- MySQL2: Driver otimizado para a conexão e operação com o banco de dados MySQL.
-
 ### Banco de Dados
 - MySQL: Sistema Gerenciador de Banco de Dados Relacional.
 
