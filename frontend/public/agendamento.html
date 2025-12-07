@@ -4,101 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamentos - Salão de Beleza</title>
-    
-    <link rel="stylesheet" href="css/agendamento.css"> 
-    
+    <link rel="stylesheet" href="css/funcionarios.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <div class="header-left">
-            <div class="menu-toggle">
-                <span></span><span></span><span></span>
-            </div>
-            <div class="user-info">
-                <p class="greeting">Olá</p>
-                <p class="user-role">Administrador</p>
-            </div>
+            <div class="menu-toggle"><span></span><span></span><span></span></div>
+            <div class="user-info"><p class="greeting">Olá</p><p class="user-role">Administrador</p></div>
         </div>
-        <div class="user-avatar">
-           <img src="/imagens/imagem-avatar.png" alt="Avatar" class="avatar">
-        </div>
+        <div class="user-avatar"><img src="imagens/imagem-avatar.png" alt="Avatar"></div>
     </header>
 
-<nav id="menuLateral" class="menu-lateral">
-    <div class="menu-top">
-        <div class="menu-user-info">
-            <p class="greeting">Olá</p>
-            <p class="user-role">Administrador</p>
+    <nav id="menuLateral" class="menu-lateral">
+        <div class="menu-top">
+            <div class="menu-user-info"><p class="greeting">Olá</p><p class="user-role">Administrador</p></div>
+            <button class="fechar-menu">×</button>
         </div>
-        <button class="fechar-menu">×</button>
-    </div>
-
-    <ul>
-        <li class="titulo"><i class="fas fa-home"></i> <a href="home.html">Início</a></li>
-
-        <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
         <ul>
-            <li><a href="servicos.html">Gerenciar Serviços</a></li>
-            <li><a href="servicos.html">Verificar serviços</a></li>
+            <li class="titulo"><i class="fas fa-home"></i><a href="home.html">Início</a></li>
+            <li class="titulo"><i class="fas fa-scissors"></i> Serviços</li>
+            <ul><li><a href="servicos.html">Novo serviço</a></li><li><a href="servicos.html">Verificar serviços</a></li></ul>
+            <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
+            <ul>
+                <li><a href="clientes.html">Clientes</a></li>
+                <li><a href="produtos.html">Produtos</a></li>
+                <li><a href="funcionarios.html">Funcionários</a></li>
+            </ul>
+            <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
+            <ul>
+                <li><a href="agendamento.html">Consulta de Agenda</a></li>
+                <li><a href="agendamento.html">Ajuste de Agenda</a></li>
+            </ul>
         </ul>
-
-        <li class="titulo"><i class="fas fa-user-plus"></i> Cadastro</li>
-        <ul>
-            <li><a href="clientes.html">Clientes</a></li>
-            <li><a href="produtos.html">Produtos</a></li>
-            <li><a href="funcionarios.html">Funcionários</a></li>
-        </ul>
-
-        <li class="titulo"><i class="fas fa-calendar-alt"></i> Agenda</li>
-        <ul>
-            <li><a href="agendamento.html">Consulta de Agenda</a></li>
-            <li><a href="agendamento.html">Ajuste de Agenda</a></li>
-        </ul>
-    </ul>
-
-    <div class="menu-footer">
-        <i class="fas fa-cog"></i> Configurações
-    </div>
-</nav>
+        <div class="menu-footer"><i class="fas fa-cog"></i> Configurações</div>
+    </nav>
 
     <main class="main-content">
         <div id="view-registro">
             <div class="form-title"><h1>Registro de Agendamentos</h1></div>
             
             <div class="search-bar">
-    <div class="search-input-wrapper" style="justify-content: space-between; align-items: end;">
-         <button id="btn-novo-cadastro" class="btn-cadastrar"><i class="fas fa-plus"></i> Novo Agendamento</button>
-         
-         <div style="display: flex; gap: 15px;">
-             <div class="form-group" style="margin-bottom: 0;">
-                <label for="filtro-cliente" style="font-weight: bold; margin-bottom: 5px; display: block;">Cliente:</label>
-                <input type="text" id="filtro-cliente" class="search-input" placeholder="Buscar por nome..." style="max-width: 200px; padding: 8px;">
-             </div>
+                <div class="search-input-wrapper" style="justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 10px;">
+                     <button id="btn-novo-cadastro" class="btn-cadastrar"><i class="fas fa-plus"></i> Novo Agendamento</button>
+                     
+                     <div style="display: flex; gap: 10px; align-items: flex-end;">
+                         <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-weight: bold; margin-bottom: 5px; display: block;">Profissional:</label>
+                            <select id="filtro-profissional" class="search-input" style="max-width: 200px; padding: 8px;">
+                                <option value="">Todos</option>
+                                </select>
+                         </div>
 
-             <div class="form-group" style="margin-bottom: 0;">
-                <label for="filtro-data" style="font-weight: bold; margin-bottom: 5px; display: block;">Data:</label>
-                <input type="date" id="filtro-data" class="search-input" style="max-width: 160px; padding: 8px;">
-             </div>
-         </div>
-    </div>
-</div>
+                         <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-weight: bold; margin-bottom: 5px; display: block;">Cliente:</label>
+                            <input type="text" id="filtro-cliente" class="search-input" placeholder="Nome..." style="max-width: 150px; padding: 8px;">
+                         </div>
+
+                         <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-weight: bold; margin-bottom: 5px; display: block;">Data:</label>
+                            <input type="date" id="filtro-data" class="search-input" style="max-width: 140px; padding: 8px;">
+                         </div>
+                     </div>
+                </div>
+            </div>
+
             <div class="table-container">
                 <table class="funcionarios-table">
                     <thead>
                         <tr>
-                            <th>Data/Hora</th>
-                            <th>Cliente</th>
-                            <th>Profissional</th>
-                            <th>Serviço</th>
-                            <th>Status</th>
-                            <th>Valor</th>
-                            <th>Editar</th>
-                            <th>Cancelar</th>
+                            <th>Data/Hora</th><th>Cliente</th><th>Profissional</th><th>Serviço</th><th>Status</th><th>Valor</th><th>Editar</th><th>Cancelar</th>
                         </tr>
                     </thead>
-                    <tbody id="tabela-agendamentos">
-                    </tbody>
+                    <tbody id="tabela-agendamentos"></tbody>
                 </table>
             </div>
         </div>
@@ -112,47 +90,51 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Cliente <span class="obrigatorio">*</span></label>
-                            <select id="cliente_id" name="cliente_id" required>
-                                <option value="" disabled selected>Carregando clientes...</option>
-                            </select>
+                            <label>Cliente <span style="color: red;">*</span></label>
+                            <select id="cliente_id" name="cliente_id" required><option value="" disabled selected>Carregando...</option></select>
                         </div>
                         <div class="form-group">
-                            <label>Profissional <span class="obrigatorio">*</span></label>
-                            <select id="cpf_profissional" name="cpf_profissional" required>
-                                <option value="" disabled selected>Carregando profissionais...</option>
-                            </select>
+                            <label>Profissional <span style="color: red;">*</span></label>
+                            <select id="cpf_profissional" name="cpf_profissional" required><option value="" disabled selected>Carregando...</option></select>
                         </div>
                         <div class="form-group">
-                            <label>Serviço <span class="obrigatorio">*</span></label>
-                            <select id="servico_id" name="servico_id" required>
-                                <option value="" disabled selected>Carregando serviços...</option>
-                            </select>
+                            <label>Serviço <span style="color: red;">*</span></label>
+                            <select id="servico_id" name="servico_id" required><option value="" disabled selected>Carregando...</option></select>
+                            <small id="info-duracao" style="color: #666; font-size: 11px;"></small>
                         </div>
                     </div>
-                    <hr style="margin: 20px 0;">
+
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ddd;">
+
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Data e Hora de Início <span class="obrigatorio">*</span></label>
-                            <input type="datetime-local" id="dataHorarioInicial" name="dataHorarioInicial" required>
+                            <label>Data do Agendamento <span style="color: red;">*</span></label>
+                            <input type="date" id="dataAgendamento" required>
                         </div>
-                         <div class="form-group">
-                            <label>Data e Hora de Término <span class="obrigatorio">*</span></label>
-                            <input type="datetime-local" id="dataHorarioFinal" name="dataHorarioFinal" required>
+                        <div class="form-group">
+                            <label>Horários Disponíveis <span style="color: red;">*</span></label>
+                            <select id="horarioInicial" name="horarioInicial" disabled required>
+                                <option value="" disabled selected>Selecione Profissional, Serviço e Data</option>
+                            </select>
+                            <div id="lista-ocupados" style="display:none; font-size: 11px; margin-top: 4px;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fim (Automático)</label>
+                            <input type="datetime-local" id="dataHorarioFinal" name="dataHorarioFinal" readonly style="background-color: #e9ecef; cursor: not-allowed;">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Valor (R$) <span class="obrigatorio">*</span></label>
-                            <input type="number" id="valor" name="valor" step="0.01" min="0" placeholder="0.00" required>
+                            <label>Valor (R$) <span style="color: red;">*</span></label>
+                            <input type="number" id="valor" name="valor" step="0.01" min="0" required>
                         </div>
                         <div class="form-group">
-                            <label>Data da Solicitação</label>
-                            <input type="date" id="dataSolicitacao" name="dataSolicitacao" required>
+                            <label>Data Solicitação</label>
+                            <input type="date" id="dataSolicitacao" name="dataSolicitacao" readonly style="background-color: #e9ecef;">
                         </div>
                         <div class="form-group" id="status-group" style="display: none;">
-                            <label>Status</label>
+                            <label>Status <span style="color: red;">*</span></label>
                             <select id="status" name="status" required>
                                 <option value="agendado">Agendado</option>
                                 <option value="em andamento">Em Andamento</option>
@@ -174,7 +156,7 @@
     <div id="modal-confirmacao" class="modal">
         <div class="modal-content">
             <div class="modal-icon">❗</div>
-            <p class="modal-text" id="modal-confirmacao-texto">Tem Certeza<br>de que deseja<br>cancelar este<br>agendamento?</p>
+            <p class="modal-text" id="modal-confirmacao-texto">Confirmar?</p>
             <div class="modal-buttons">
                 <button id="btn-modal-confirmar" class="btn-confirmar">CONFIRMAR</button>
                 <button id="btn-modal-cancelar" class="btn-cancelar-modal">VOLTAR</button>
@@ -184,7 +166,7 @@
     <div id="modal-sucesso" class="modal">
          <div class="modal-content">
             <div class="modal-icon-success">✓</div>
-            <p class="modal-text" id="sucesso-msg">Ação executada com sucesso!</p>
+            <p class="modal-text" id="sucesso-msg">Sucesso!</p>
          </div>
     </div>
     
