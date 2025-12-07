@@ -112,19 +112,19 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Cliente</label>
+                            <label>Cliente <span class="obrigatorio">*</span></label>
                             <select id="cliente_id" name="cliente_id" required>
                                 <option value="" disabled selected>Carregando clientes...</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Profissional</label>
+                            <label>Profissional <span class="obrigatorio">*</span></label>
                             <select id="cpf_profissional" name="cpf_profissional" required>
                                 <option value="" disabled selected>Carregando profissionais...</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Serviço</label>
+                            <label>Serviço <span class="obrigatorio">*</span></label>
                             <select id="servico_id" name="servico_id" required>
                                 <option value="" disabled selected>Carregando serviços...</option>
                             </select>
@@ -133,18 +133,18 @@
                     <hr style="margin: 20px 0;">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Data e Hora de Início</label>
+                            <label>Data e Hora de Início <span class="obrigatorio">*</span></label>
                             <input type="datetime-local" id="dataHorarioInicial" name="dataHorarioInicial" required>
                         </div>
                          <div class="form-group">
-                            <label>Data e Hora de Término</label>
+                            <label>Data e Hora de Término <span class="obrigatorio">*</span></label>
                             <input type="datetime-local" id="dataHorarioFinal" name="dataHorarioFinal" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Valor (R$)</label>
+                            <label>Valor (R$) <span class="obrigatorio">*</span></label>
                             <input type="number" id="valor" name="valor" step="0.01" min="0" placeholder="0.00" required>
                         </div>
                         <div class="form-group">

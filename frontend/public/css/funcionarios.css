@@ -574,3 +574,10 @@ input:disabled, select:disabled, textarea:disabled {
     border: 1px solid #ced4da;
     opacity: 1; /* Garante opacidade total em alguns navegadores */
 }
+
+/* Estilo para asterisco vermelho em campos obrigatórios */
+label .obrigatorio {
+    color: red;
+    font-weight: bold;
+    margin-left: 2px;
+}

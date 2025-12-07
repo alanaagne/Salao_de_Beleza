@@ -116,11 +116,11 @@
                 <!-- LINHA 1: Nome e Categoria -->
                 <div class="form-group-row">
                     <div class="form-field" style="grid-column: span 2;">
-                        <label for="editNomeProduto">Nome do Produto *</label>
+                        <label for="editNomeProduto">Nome do Produto <span class="obrigatorio">*</span></label>
                         <input type="text" id="editNomeProduto" placeholder="Digite o nome do produto" required>
                     </div>
                     <div class="form-field">
-                        <label for="editCategoriaProduto">Categoria *</label>
+                        <label for="editCategoriaProduto">Categoria <span class="obrigatorio">*</span></label>
                         <input type="text" id="editCategoriaProduto" placeholder="Ex: Shampoo, Tintura" required>
                     </div>
                 </div>
@@ -128,11 +128,11 @@
                 <!-- LINHA 2: Valor e Status -->
                 <div class="form-group-row">
                     <div class="form-field">
-                        <label for="editValorVenda">Valor de Venda (R$) *</label>
+                        <label for="editValorVenda">Valor de Venda (R$) <span class="obrigatorio">*</span></label>
                         <input type="number" id="editValorVenda" placeholder="0.00" step="0.01" min="0" required>
                     </div>
                     <div class="form-field">
-                        <label for="editStatus">Status *</label>
+                        <label for="editStatus">Status <span class="obrigatorio">*</span></label>
                         <select id="editStatus" required>
                             <option value="Disponível">Disponível</option>
                             <option value="Indisponível">Indisponível</option>
@@ -140,7 +140,7 @@
                         </select>
                     </div>
                     <div class="form-field">
-                        <label for="editDataCadastro">Data de Cadastro *</label>
+                        <label for="editDataCadastro">Data de Cadastro <span class="obrigatorio">*</span></label>
                         <input type="date" id="editDataCadastro" required>
                     </div>
                 </div>
