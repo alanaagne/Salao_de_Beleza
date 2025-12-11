@@ -209,12 +209,25 @@ input[type="date"]:focus {
     font-size: 18px;
     cursor: pointer;
     padding: 5px 10px;
+    transition: all 0.2s;
+}
+
+.btn-editar {
     color: #FF5B5B;
 }
 
-.btn-editar:hover,
-.btn-cancelar:hover {
+.btn-cancelar {
+    color: white;
+}
+
+.btn-editar:hover {
     opacity: 0.7;
+    transform: scale(1.1);
+}
+
+.btn-cancelar:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
 }
 
 /* Formulário de Cadastro/Edição */

@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${ag.status}</td>
                         <td>${formatarValor(ag.valor)}</td>
                         <td><i class="fas fa-pencil-alt btn-editar" data-codigo="${ag.codigo}" style="cursor:pointer"></i></td>
-                        <td><i class="fas fa-trash-alt btn-cancelar" data-codigo="${ag.codigo}" style="cursor:pointer"></i></td>
+                        <td><i class="fas fa-ban btn-cancelar" data-codigo="${ag.codigo}" style="cursor:pointer"></i></td>
                     </tr>
                 `;
             });
